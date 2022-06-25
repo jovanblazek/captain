@@ -1,18 +1,14 @@
 // eslint-disable-next-line simple-import-sort/imports
 import '../config/environment'
 import { App as SlackApp } from '@slack/bolt'
-import cron from 'node-cron'
+import { scheduleCronJob, ScheduledJob } from './utils/cron'
+import { initCommandHandler } from './utils/commandHandler'
 import Log from './utils/logger'
-import { randomPicker } from './randomPicker'
+import { Prisma } from './utils/prismaClient'
 
 const { PORT, SLACK_BOT_TOKEN, SLACK_SIGNING_SECRET, SLACK_APP_TOKEN } = process.env
 
-const CronJobs = [
-  {
-    channelName: 'general',
-    schedule: '*/2 * * * *',
-  },
-]
+const ScheduledJobs: ScheduledJob[] = []
 
 export const SlackAppInstance = new SlackApp({
   token: SLACK_BOT_TOKEN,
@@ -22,23 +18,24 @@ export const SlackAppInstance = new SlackApp({
   port: Number(PORT) || 4000,
 })
 
-// void randomPicker('general', SlackAppInstance)
-
-void (async () => {
+async function main() {
   await SlackAppInstance.start()
   Log.info(`Slack bot server is running. API is listening on port ${PORT || ''}`)
-})()
+  initCommandHandler(ScheduledJobs, SlackAppInstance)
 
-CronJobs.forEach(({ channelName, schedule }) => {
-  cron.schedule(
-    schedule,
-    () => {
-      Log.info(`Running cron job for channel ${channelName}`)
-      void randomPicker(channelName, SlackAppInstance)
-    },
-    {
-      scheduled: true,
-      timezone: 'Europe/Berlin',
-    }
-  )
-})
+  const cronJobs = await Prisma.cron.findMany()
+  cronJobs.forEach(({ channelId, schedule }) => {
+    const cron = scheduleCronJob({ channelId, schedule }, SlackAppInstance)
+    ScheduledJobs.push(cron)
+  })
+  Log.info(`Loaded ${cronJobs.length} cron jobs`)
+}
+
+main()
+  .catch((error) => {
+    Log.error(error)
+  })
+  // eslint-disable-next-line @typescript-eslint/no-misused-promises
+  .finally(async () => {
+    await Prisma.$disconnect()
+  })
