@@ -1,4 +1,4 @@
-import { once } from 'ramda'
+import { once } from 'lodash'
 import { createLogger, format, transports } from 'winston'
 
 type LogItem = {

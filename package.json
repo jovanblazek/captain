@@ -13,8 +13,8 @@
   "license": "ISC",
   "devDependencies": {
     "@sudolabs-io/eslint-config-sudolabs": "^1.5.43",
+    "@types/lodash": "^4.14.182",
     "@types/node-cron": "^3.0.1",
-    "@types/ramda": "^0.28.14",
     "@typescript-eslint/eslint-plugin": "^5.29.0",
     "@typescript-eslint/parser": "^5.29.0",
     "eslint": "^8.18.0",
@@ -34,8 +34,8 @@
     "@slack/bolt": "^3.11.3",
     "dayjs": "^1.11.3",
     "dotenv": "^16.0.1",
+    "lodash": "^4.17.21",
     "node-cron": "^3.0.0",
-    "ramda": "^0.28.0",
     "ts-node": "^10.8.1",
     "winston": "^3.8.0"
   }
