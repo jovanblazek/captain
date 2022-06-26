@@ -1,10 +1,9 @@
-// eslint-disable-next-line simple-import-sort/imports
-import '../config/environment'
 import { App as SlackApp } from '@slack/bolt'
-import { scheduleCronJob, ScheduledJob } from './utils/cron'
 import { initCommandHandler } from './utils/commandHandler'
+import { scheduleCronJob, ScheduledJob } from './utils/cron'
 import Log from './utils/logger'
 import { Prisma } from './utils/prismaClient'
+import '../config/environment'
 
 const { PORT, SLACK_BOT_TOKEN, SLACK_SIGNING_SECRET, SLACK_APP_TOKEN } = process.env
 

@@ -8,6 +8,7 @@ import { Prisma } from '../utils/prismaClient'
 export default new Command(
   {
     name: CommandNames.setup,
+    description: 'Setup a cron job for this channel',
   },
   async ({ ack, command, respond }, scheduledJobs, slackAppInstance) => {
     await ack()

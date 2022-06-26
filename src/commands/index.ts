@@ -1,20 +1,12 @@
-import { reduce } from 'lodash'
-import { CommandHandlerArgs } from '../classes'
 import clear from './clear'
 import list from './list'
+import pick from './pick'
 import setup from './setup'
 
+// help command is left out to avoid circular dependency
 export const Commands = {
   clear,
   list,
   setup,
+  pick,
 }
-
-export const CommandHandlers: { [key: string]: CommandHandlerArgs } = reduce(
-  Commands,
-  (commandHandlers, command) => ({
-    ...commandHandlers,
-    [command.params.name]: command.handler,
-  }),
-  {}
-)

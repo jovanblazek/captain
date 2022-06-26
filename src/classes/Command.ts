@@ -3,6 +3,7 @@ import { ScheduledJob } from '../utils/cron'
 
 export type CommandParametersArgs = {
   name: string
+  description: string
 }
 
 export type CommandHandlerArgs = (

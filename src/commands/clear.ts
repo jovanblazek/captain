@@ -5,6 +5,7 @@ import { Prisma } from '../utils/prismaClient'
 export default new Command(
   {
     name: CommandNames.clear,
+    description: 'Clear all scheduled jobs for this channel',
   },
   async ({ ack, command, respond }, scheduledJobs) => {
     await ack()
