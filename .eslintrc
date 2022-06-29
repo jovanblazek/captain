@@ -2,6 +2,7 @@
   "root": true,
   "extends": [
     "@sudolabs-io/eslint-config-sudolabs/typescript",
+    "@sudolabs-io/eslint-config-sudolabs/with/jest",
     "@sudolabs-io/eslint-config-sudolabs/with/prettier"
   ],
   "rules": {

@@ -1,6 +1,8 @@
 import { once } from 'lodash'
 import { createLogger, format, transports } from 'winston'
 
+const { NODE_ENV } = process.env
+
 type LogItem = {
   level: string
   message: string
@@ -36,6 +38,7 @@ const initLogger = once(() =>
     level: 'debug',
     format: consoleFormatter,
     transports: [new transports.Console()],
+    silent: NODE_ENV === 'test',
   })
 )
 

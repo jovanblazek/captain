@@ -1,21 +1,15 @@
-import { App as SlackApp } from '@slack/bolt'
 import { initCommandHandler } from './utils/commandHandler'
 import { scheduleCronJob, ScheduledJob } from './utils/cron'
 import Log from './utils/logger'
 import { Prisma } from './utils/prismaClient'
+import createSlackApp from './utils/slackApp'
 import '../config/environment'
 
-const { PORT, SLACK_BOT_TOKEN, SLACK_SIGNING_SECRET, SLACK_APP_TOKEN } = process.env
+const { PORT } = process.env
 
 const ScheduledJobs: ScheduledJob[] = []
 
-export const SlackAppInstance = new SlackApp({
-  token: SLACK_BOT_TOKEN,
-  signingSecret: SLACK_SIGNING_SECRET,
-  socketMode: true,
-  appToken: SLACK_APP_TOKEN,
-  port: Number(PORT) || 4000,
-})
+export const SlackAppInstance = createSlackApp()
 
 async function main() {
   await SlackAppInstance.start()
