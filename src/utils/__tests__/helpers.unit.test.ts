@@ -11,6 +11,9 @@ jest.mock('@slack/web-api', () => {
     conversations: {
       members: jest.fn(),
     },
+    users: {
+      info: jest.fn(),
+    },
   }
   return { WebClient: jest.fn(() => mockedClient) }
 })
@@ -46,8 +49,10 @@ describe('Helpers unit tests', () => {
 
   describe('getModerators', () => {
     let conversationMembersSpy: jest.SpyInstance
+    let usersInfoSpy: jest.SpyInstance
     beforeAll(() => {
       conversationMembersSpy = jest.spyOn(slackAppInstance.client.conversations, 'members')
+      usersInfoSpy = jest.spyOn(slackAppInstance.client.users, 'info')
     })
     beforeEach(() => {
       jest.clearAllMocks()
@@ -67,11 +72,25 @@ describe('Helpers unit tests', () => {
       expect(moderators).toBeNull()
     })
 
-    it('should return array of moderators', async () => {
+    it('should return null if all users are bots', async () => {
       const channelId = '1234'
-      const members = ['member1', 'member2']
+      const members = ['member1', 'member2', 'member3']
+      conversationMembersSpy.mockImplementation(() => ({ members }))
+      usersInfoSpy.mockImplementation(({ user }) => ({
+        user: { is_bot: true, id: user },
+      }))
+      const moderators = await getModerators(channelId, slackAppInstance)
+      expect(moderators).toStrictEqual(null)
+    })
+
+    it('should return array of moderators without bot users', async () => {
+      const channelId = '1234'
+      const members = ['member1', 'member2', 'member3']
 
       conversationMembersSpy.mockImplementation(() => ({ members }))
+      usersInfoSpy.mockImplementation(({ user }) => ({
+        user: { is_bot: user === 'member1', id: user },
+      }))
       const moderators = await getModerators(channelId, slackAppInstance)
 
       expect(slackAppInstance.client.conversations.members).toHaveBeenCalledTimes(1)
@@ -80,8 +99,10 @@ describe('Helpers unit tests', () => {
           channel: channelId,
         })
       )
-      expect(moderators).toContainEqual('member1')
+      expect(slackAppInstance.client.users.info).toHaveBeenCalledTimes(3)
+
       expect(moderators).toContainEqual('member2')
+      expect(moderators).toContainEqual('member3')
     })
   })
 })

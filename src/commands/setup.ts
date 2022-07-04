@@ -35,6 +35,6 @@ export default new Command(
       })
       return
     }
-    await respond('Cron syntax error. Validate syntax at this [site](https://crontab.guru/)')
+    await respond('Cron syntax error. Validate syntax at this <https://crontab.guru/|this site>.')
   }
 )
