@@ -1,0 +1,24 @@
+name: Detect changes in files with enviroment variables
+
+on: [pull_request, workflow_dispatch]
+
+jobs:
+  detect-env-changes:
+    runs-on: self-hosted
+
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Detect changes in env files
+        uses: jovanblazek/env-changes-detector@v1.0.1
+        id: detect-changes-in-env-files
+        with:
+          files: '["**env.example", "**env.test.example"]'
+
+      - name: Add or update sticky comment
+        uses: marocchino/sticky-pull-request-comment@v2.2.0
+        with:
+          message: |
+            ${{ steps.detect-changes-in-env-files.outputs.env-changes-md }}
