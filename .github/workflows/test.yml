@@ -1,0 +1,32 @@
+name: Run build & tests
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+on:
+  push:
+    # ignore changes in documentation files
+    paths-ignore:
+      - "**.md"
+
+env:
+  NODE_ENV: test
+
+jobs:
+  test-jest:
+    runs-on: self-hosted
+    
+    strategy:
+      matrix:
+        node-version: [16.x]
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+      - run: npm ci
+      - run: npm run build --if-present
+      - run: npm run test
