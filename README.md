@@ -29,6 +29,9 @@ Captain is a slack bot that allows you to automatically pick a random channel me
 
 Captain will pick up to two human channel members in case one of them is unavailable.
 
+> **Note** \
+> Captain is currently in closed beta and is not present in slack app directory yet.
+
 ## 📡 Commands
 | Command | Description |
 | ------- | ----------- |
