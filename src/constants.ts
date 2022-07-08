@@ -5,3 +5,15 @@ export const CommandNames = {
   pick: '/pick',
   help: '/help',
 }
+
+export const ModalIds = {
+  setup: 'setupModal',
+}
+
+export const BlockIds = {
+  setup: {
+    cron: 'cron',
+    message: 'message',
+    prefixDate: 'prefixDate',
+  },
+}

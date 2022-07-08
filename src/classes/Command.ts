@@ -8,7 +8,6 @@ export type CommandParametersArgs = {
 
 export type CommandHandlerArgs = (
   args: SlackCommandMiddlewareArgs,
-  scheduledJobs: ScheduledJob[],
   slackAppInstance: App
 ) => Promise<void>
 

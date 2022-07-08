@@ -1,4 +1,5 @@
 import { Command } from '../classes'
+import ScheduledJobs from '../classes/ScheduledJobs'
 import { CommandNames } from '../constants'
 import { Prisma } from '../utils/prismaClient'
 
@@ -7,18 +8,14 @@ export default new Command(
     name: CommandNames.clear,
     description: 'Clear all scheduled jobs for this channel',
   },
-  async ({ ack, command, respond }, scheduledJobs) => {
+  async ({ ack, command, respond }) => {
     await ack()
     const { channel_id: channelId } = command
     await Prisma.cron.deleteMany({
       where: { channelId: { equals: channelId } },
     })
-    // stop existing cron job
-    scheduledJobs
-      .filter((job) => channelId === job.channelId)
-      .forEach((job) => {
-        job.cron.stop()
-      })
+
+    ScheduledJobs.getInstance().removeChannelJobs(channelId)
     await respond('Cron jobs removed.')
   }
 )

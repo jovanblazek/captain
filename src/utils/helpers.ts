@@ -12,6 +12,20 @@ export const sendMessage = async (channelId: string, message: string, slackAppIn
   })
 }
 
+export const sendEphermalMessage = async (
+  channelId: string,
+  userId: string,
+  message: string,
+  slackAppInstance: App
+) => {
+  await slackAppInstance.client.chat.postEphemeral({
+    channel: channelId,
+    user: userId,
+    text: message,
+    link_names: true,
+  })
+}
+
 export const getModerators = async (channelId: string, slackAppInstance: App) => {
   try {
     // get channel member ids
