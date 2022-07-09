@@ -13,8 +13,9 @@ export default new Command(
       where: { channelId: { equals: command.channel_id } },
     })
     const cronJobText =
-      cronJobs.map(({ schedule }, index) => `${index + 1}. \`${schedule}\``).join('\n') ||
-      'No cron jobs found.'
+      cronJobs
+        .map(({ schedule, message }, index) => `${index + 1}. \`${schedule}\` - ${message}`)
+        .join('\n') || 'No sheduled jobs found. The map is definitely upside down 🗺 🤔'
     await respond(cronJobText)
   }
 )

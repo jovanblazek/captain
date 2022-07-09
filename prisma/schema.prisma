@@ -12,8 +12,9 @@ datasource db {
 
 model Cron {
   id        Int       @id @default(autoincrement())
-  createdAt DateTime  @default(now())
-  updatedAt DateTime? @default(now()) @updatedAt
   channelId String    @unique @db.VarChar(255)
   schedule  String    @db.VarChar(255)
+  message   String
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @default(now()) @updatedAt
 }

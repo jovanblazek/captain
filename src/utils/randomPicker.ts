@@ -15,16 +15,21 @@ const getMedal = (place: number) => {
   }
 }
 
-const formatMessage = (moderators: string[]) =>
-  `${dayjs().format('DD.MM.')} standup moderators:\n${moderators
+// function that replaces {{date}} with the current date
+const replaceDate = (message: string) => message.replace(/\{\{date\}\}/g, dayjs().format('DD.MM.'))
+
+const formatMessage = ({ message, moderators }: { message: string; moderators: string[] }) =>
+  `${replaceDate(message)}\n${moderators
     .map((moderator, index) => `${getMedal(index + 1)} <@${moderator}>`)
     .join('\n')}`
 
 export const randomPicker = async ({
   channelId,
+  message,
   slackAppInstance,
 }: {
   channelId: string
+  message: string
   slackAppInstance: App
 }) => {
   const moderators = await getModerators(channelId, slackAppInstance)
@@ -32,5 +37,5 @@ export const randomPicker = async ({
     throw new Error('No moderators generated')
   }
 
-  await sendMessage(channelId, `${formatMessage(moderators)}`, slackAppInstance)
+  await sendMessage(channelId, `${formatMessage({ message, moderators })}`, slackAppInstance)
 }

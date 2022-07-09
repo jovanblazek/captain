@@ -11,11 +11,15 @@ export default new Command(
   async ({ ack, command, respond }) => {
     await ack()
     const { channel_id: channelId } = command
-    await Prisma.cron.deleteMany({
+    const { count } = await Prisma.cron.deleteMany({
       where: { channelId: { equals: channelId } },
     })
 
-    ScheduledJobs.getInstance().removeChannelJobs(channelId)
-    await respond('Cron jobs removed.')
+    if (count > 0) {
+      ScheduledJobs.getInstance().removeChannelJobs(channelId)
+      await respond('All jobs for this channel were thrown overboard 🌊 🌊 🌊')
+      return
+    }
+    await respond("No jobs found on the deck. It's a good day to be a captain! 🏝")
   }
 )

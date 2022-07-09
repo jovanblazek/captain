@@ -16,8 +16,8 @@ async function main() {
   initCommandHandler(SlackAppInstance)
 
   const cronJobs = await Prisma.cron.findMany()
-  cronJobs.forEach(({ channelId, schedule }) => {
-    scheduleCronJob({ channelId, schedule }, SlackAppInstance)
+  cronJobs.forEach(({ channelId, schedule, message }) => {
+    scheduleCronJob({ channelId, schedule, message }, SlackAppInstance)
   })
   Log.info(`Loaded ${cronJobs.length} cron jobs`)
   initModalHandler(SlackAppInstance)

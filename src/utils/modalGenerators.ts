@@ -36,7 +36,7 @@ export const getSetupModal = (metadata: { channelId: string }): ModalView => ({
         action_id: BlockIds.setup.message,
         placeholder: {
           type: 'plain_text',
-          text: 'Stadup moderators',
+          text: "It's {{date}} and todays standup moderators are:",
         },
       },
       label: {
