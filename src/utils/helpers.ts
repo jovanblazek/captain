@@ -4,10 +4,31 @@ import Log from './logger'
 const MODERATOR_COUNT = 2
 const CONVERSATION_MEMBERS_LIMIT = 50
 
-export const sendMessage = async (channelId: string, message: string, slackAppInstance: App) => {
+interface SendMessageOptions {
+  channelId: string
+  userId?: string
+  text: string
+  slackAppInstance: App
+}
+
+export const sendMessage = async ({
+  channelId,
+  userId,
+  text,
+  slackAppInstance,
+}: SendMessageOptions) => {
+  if (userId) {
+    await slackAppInstance.client.chat.postEphemeral({
+      channel: channelId,
+      user: userId,
+      text,
+      link_names: true,
+    })
+    return
+  }
   await slackAppInstance.client.chat.postMessage({
     channel: channelId,
-    text: message,
+    text,
     link_names: true,
   })
 }
