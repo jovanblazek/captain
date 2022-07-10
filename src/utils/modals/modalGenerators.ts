@@ -1,5 +1,5 @@
 import { ModalView } from '@slack/web-api'
-import { BlockIds, ModalIds } from '../constants'
+import { BlockIds, ModalIds } from '../../constants'
 
 export const getSetupModal = (metadata: { channelId: string }): ModalView => ({
   callback_id: ModalIds.setup,

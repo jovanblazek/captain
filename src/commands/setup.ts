@@ -7,7 +7,7 @@ import { BlockIds, CommandNames } from '../constants'
 import { scheduleCronJob } from '../utils/cron'
 import { sendMessage } from '../utils/helpers'
 import Log from '../utils/logger'
-import { getSetupModal } from '../utils/modalGenerators'
+import { getSetupModal } from '../utils/modals/modalGenerators'
 import { Prisma } from '../utils/prismaClient'
 
 export const handleSetupModalSubmit = async (
