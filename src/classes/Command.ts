@@ -1,5 +1,4 @@
 import { App, SlackCommandMiddlewareArgs } from '@slack/bolt'
-import { ScheduledJob } from '../utils/cron'
 
 export type CommandParametersArgs = {
   name: string

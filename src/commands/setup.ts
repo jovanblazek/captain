@@ -5,7 +5,7 @@ import { Command } from '../classes'
 import ScheduledJobs from '../classes/ScheduledJobs'
 import { BlockIds, CommandNames } from '../constants'
 import { scheduleCronJob } from '../utils/cron'
-import { sendEphermalMessage } from '../utils/helpers'
+import { sendMessage } from '../utils/helpers'
 import Log from '../utils/logger'
 import { getSetupModal } from '../utils/modalGenerators'
 import { Prisma } from '../utils/prismaClient'
@@ -15,6 +15,7 @@ export const handleSetupModalSubmit = async (
   slackAppInstance: App
 ) => {
   await ack()
+  const userId = get(body, ['user', 'id'])
   const values = get(body, ['view', 'state', 'values'])
   const schedule = get(values, [BlockIds.setup.cron, BlockIds.setup.cron, 'value'])!
   const message = get(values, [BlockIds.setup.message, BlockIds.setup.message, 'value'])!
@@ -32,15 +33,15 @@ export const handleSetupModalSubmit = async (
     scheduleCronJob({ channelId, schedule, message }, slackAppInstance)
 
     Log.info(`Upserted cron job for ${channelId} with schedule ${schedule}`)
-    await sendEphermalMessage(channelId, body.user.id, 'Aye aye sir! 🫡', slackAppInstance)
+    await sendMessage({ channelId, userId, text: 'Aye aye sir! 🫡', slackAppInstance })
     return
   }
-  await sendEphermalMessage(
+  await sendMessage({
     channelId,
-    body.user.id,
-    'Cron syntax error. Validate syntax at this <https://crontab.guru/|this site>.',
-    slackAppInstance
-  )
+    userId,
+    text: 'Cron syntax error. Validate syntax at this <https://crontab.guru/|this site>.',
+    slackAppInstance,
+  })
 }
 
 export default new Command(

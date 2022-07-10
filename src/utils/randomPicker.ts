@@ -37,5 +37,9 @@ export const randomPicker = async ({
     throw new Error('No moderators generated')
   }
 
-  await sendMessage(channelId, `${formatMessage({ message, moderators })}`, slackAppInstance)
+  await sendMessage({
+    channelId,
+    text: `${formatMessage({ message, moderators })}`,
+    slackAppInstance,
+  })
 }

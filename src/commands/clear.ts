@@ -17,7 +17,7 @@ export default new Command(
 
     if (count > 0) {
       ScheduledJobs.getInstance().removeChannelJobs(channelId)
-      await respond('All jobs for this channel were thrown overboard 🌊 🌊 🌊')
+      await respond('All jobs for this channel have been thrown overboard 🌊 🌊 🌊')
       return
     }
     await respond("No jobs found on the deck. It's a good day to be a captain! 🏝")

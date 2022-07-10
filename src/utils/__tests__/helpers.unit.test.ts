@@ -7,6 +7,7 @@ jest.mock('@slack/web-api', () => {
   const mockedClient = {
     chat: {
       postMessage: jest.fn(),
+      postEphemeral: jest.fn(),
     },
     conversations: {
       members: jest.fn(),
@@ -30,17 +31,33 @@ describe('Helpers unit tests', () => {
   })
 
   describe('sendMessage', () => {
-    it('should call postMessage', async () => {
-      const channelId = '1234'
-      const message = 'Hello world!'
+    const channelId = '1234'
+    const text = 'Hello world!'
 
-      await sendMessage(channelId, message, slackAppInstance)
+    it('should call postMessage', async () => {
+      await sendMessage({ channelId, text, slackAppInstance })
 
       expect(slackAppInstance.client.chat.postMessage).toHaveBeenCalledTimes(1)
       expect(slackAppInstance.client.chat.postMessage).toHaveBeenCalledWith(
         expect.objectContaining({
-          text: message,
+          text,
           channel: channelId,
+          link_names: true,
+        })
+      )
+    })
+
+    it('should call postEphemeral', async () => {
+      const userId = '5678'
+
+      await sendMessage({ channelId, userId, text, slackAppInstance })
+
+      expect(slackAppInstance.client.chat.postEphemeral).toHaveBeenCalledTimes(1)
+      expect(slackAppInstance.client.chat.postEphemeral).toHaveBeenCalledWith(
+        expect.objectContaining({
+          channel: channelId,
+          user: userId,
+          text,
           link_names: true,
         })
       )

@@ -2,7 +2,6 @@ import cron from 'node-cron'
 
 export type ScheduledJob = {
   channelId: string
-  schedule: string
   cron: cron.ScheduledTask
 }
 

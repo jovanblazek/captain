@@ -8,9 +8,8 @@ export const scheduleCronJob = (
   { channelId, schedule, message }: { channelId: string; schedule: string; message: string },
   slackAppInstance: App
 ) => {
-  const result = {
+  const newJob = {
     channelId,
-    schedule,
     cron: cron.schedule(
       schedule,
       () => {
@@ -27,5 +26,5 @@ export const scheduleCronJob = (
       }
     ),
   }
-  ScheduledJobs.getInstance().addJob(result)
+  ScheduledJobs.getInstance().addJob(newJob)
 }
