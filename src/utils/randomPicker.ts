@@ -23,25 +23,26 @@ const formatMessage = ({ message, moderators }: { message: string; moderators: s
     .map((moderator, index) => `${getMedal(index + 1)} <@${moderator}>`)
     .join('\n')}`
 
-export const randomPicker = async ({
-  channelId,
-  message,
-  ignoredMembers = [],
-  slackAppInstance,
-}: {
+interface RandomPickerOptions {
   channelId: string
   message: string
   ignoredMembers?: string[]
+}
+
+export const randomPicker = async (
+  { channelId, message, ignoredMembers = [] }: RandomPickerOptions,
   slackAppInstance: App
-}) => {
-  const moderators = await getModerators(channelId, ignoredMembers, slackAppInstance)
+) => {
+  const moderators = await getModerators({ channelId, ignoredMembers }, slackAppInstance)
   if (!moderators || !moderators.length) {
     throw new Error('No moderators generated')
   }
 
-  await sendMessage({
-    channelId,
-    text: `${formatMessage({ message, moderators })}`,
-    slackAppInstance,
-  })
+  await sendMessage(
+    {
+      channelId,
+      text: `${formatMessage({ message, moderators })}`,
+    },
+    slackAppInstance
+  )
 }

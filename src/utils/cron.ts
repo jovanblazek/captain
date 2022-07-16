@@ -19,7 +19,7 @@ export const scheduleCronJob = (
       schedule,
       () => {
         Log.info(`Running cron job for channelId ${channelId}`)
-        randomPicker({ channelId, message, ignoredMembers, slackAppInstance }).catch((error) => {
+        randomPicker({ channelId, message, ignoredMembers }, slackAppInstance).catch((error) => {
           Log.error(error)
         })
       },

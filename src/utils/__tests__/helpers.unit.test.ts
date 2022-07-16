@@ -2,7 +2,7 @@ import { App } from '@slack/bolt'
 import { WebClient } from '@slack/web-api'
 import { getModerators, sendMessage } from '../helpers'
 
-// jest.mock('@slack/bolt')
+// TODO add default mock behavior instead of mocking it every time
 jest.mock('@slack/web-api', () => {
   const mockedClient = {
     chat: {
@@ -35,7 +35,7 @@ describe('Helpers unit tests', () => {
     const text = 'Hello world!'
 
     it('should call postMessage', async () => {
-      await sendMessage({ channelId, text, slackAppInstance })
+      await sendMessage({ channelId, text }, slackAppInstance)
 
       expect(slackAppInstance.client.chat.postMessage).toHaveBeenCalledTimes(1)
       expect(slackAppInstance.client.chat.postMessage).toHaveBeenCalledWith(
@@ -50,7 +50,7 @@ describe('Helpers unit tests', () => {
     it('should call postEphemeral', async () => {
       const userId = '5678'
 
-      await sendMessage({ channelId, userId, text, slackAppInstance })
+      await sendMessage({ channelId, userId, text }, slackAppInstance)
 
       expect(slackAppInstance.client.chat.postEphemeral).toHaveBeenCalledTimes(1)
       expect(slackAppInstance.client.chat.postEphemeral).toHaveBeenCalledWith(
@@ -78,7 +78,7 @@ describe('Helpers unit tests', () => {
       const channelId = '1234'
 
       conversationMembersSpy.mockImplementation(() => ({ members: null }))
-      const moderators = await getModerators(channelId, slackAppInstance)
+      const moderators = await getModerators({ channelId }, slackAppInstance)
 
       expect(conversationMembersSpy).toHaveBeenCalledTimes(1)
       expect(conversationMembersSpy).toHaveBeenCalledWith(
@@ -96,7 +96,7 @@ describe('Helpers unit tests', () => {
       usersInfoSpy.mockImplementation(({ user }) => ({
         user: { is_bot: true, id: user },
       }))
-      const moderators = await getModerators(channelId, slackAppInstance)
+      const moderators = await getModerators({ channelId }, slackAppInstance)
       expect(moderators).toStrictEqual(null)
     })
 
@@ -108,7 +108,7 @@ describe('Helpers unit tests', () => {
       usersInfoSpy.mockImplementation(({ user }) => ({
         user: { is_bot: user === 'member1', id: user },
       }))
-      const moderators = await getModerators(channelId, slackAppInstance)
+      const moderators = await getModerators({ channelId }, slackAppInstance)
 
       expect(slackAppInstance.client.conversations.members).toHaveBeenCalledTimes(1)
       expect(slackAppInstance.client.conversations.members).toHaveBeenCalledWith(
@@ -120,6 +120,30 @@ describe('Helpers unit tests', () => {
 
       expect(moderators).toContainEqual('member2')
       expect(moderators).toContainEqual('member3')
+    })
+
+    it('should return array of moderators without ignored members', async () => {
+      const channelId = '1234'
+      const members = ['member1', 'member2', 'member3']
+      const ignoredMembers = ['member2', 'member3']
+
+      conversationMembersSpy.mockImplementation(() => ({ members }))
+      usersInfoSpy.mockImplementation(({ user }) => ({
+        user: { is_bot: false, id: user },
+      }))
+      const moderators = await getModerators({ channelId, ignoredMembers }, slackAppInstance)
+
+      expect(slackAppInstance.client.conversations.members).toHaveBeenCalledTimes(1)
+      expect(slackAppInstance.client.conversations.members).toHaveBeenCalledWith(
+        expect.objectContaining({
+          channel: channelId,
+        })
+      )
+      expect(slackAppInstance.client.users.info).toHaveBeenCalledTimes(1)
+
+      expect(moderators).toContainEqual('member1')
+      expect(moderators).not.toContainEqual('member2')
+      expect(moderators).not.toContainEqual('member3')
     })
   })
 })

@@ -39,15 +39,17 @@ export const handleSetupModalSubmit = async (
     scheduleCronJob({ channelId, schedule, ignoredMembers, message }, slackAppInstance)
 
     Log.info(`Upserted cron job for ${channelId} with schedule ${schedule}`)
-    await sendMessage({ channelId, userId, text: 'Aye aye sir! 🫡', slackAppInstance })
+    await sendMessage({ channelId, userId, text: 'Aye aye sir! 🫡' }, slackAppInstance)
     return
   }
-  await sendMessage({
-    channelId,
-    userId,
-    text: 'Cron syntax error. Validate syntax at this <https://crontab.guru/|this site>.',
-    slackAppInstance,
-  })
+  await sendMessage(
+    {
+      channelId,
+      userId,
+      text: 'Cron syntax error. Validate syntax at this <https://crontab.guru/|this site>.',
+    },
+    slackAppInstance
+  )
 }
 
 export default new Command(

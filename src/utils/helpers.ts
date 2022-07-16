@@ -9,15 +9,12 @@ interface SendMessageOptions {
   channelId: string
   userId?: string
   text: string
-  slackAppInstance: App
 }
 
-export const sendMessage = async ({
-  channelId,
-  userId,
-  text,
-  slackAppInstance,
-}: SendMessageOptions) => {
+export const sendMessage = async (
+  { channelId, userId, text }: SendMessageOptions,
+  slackAppInstance: App
+) => {
   if (userId) {
     await slackAppInstance.client.chat.postEphemeral({
       channel: channelId,
@@ -35,8 +32,7 @@ export const sendMessage = async ({
 }
 
 export const getModerators = async (
-  channelId: string,
-  ignoredMembers: string[],
+  { channelId, ignoredMembers = [] }: { channelId: string; ignoredMembers?: string[] },
   slackAppInstance: App
 ) => {
   try {
