@@ -29,6 +29,22 @@ export const getSetupModal = (metadata: { channelId: string }): ModalView => ({
       },
     },
     {
+      type: 'section',
+      block_id: BlockIds.setup.ignoredMembers,
+      text: {
+        type: 'mrkdwn',
+        text: 'Ignored users',
+      },
+      accessory: {
+        action_id: BlockIds.setup.ignoredMembers,
+        type: 'multi_users_select',
+        placeholder: {
+          type: 'plain_text',
+          text: 'Excluded users',
+        },
+      },
+    },
+    {
       type: 'input',
       block_id: BlockIds.setup.message,
       element: {

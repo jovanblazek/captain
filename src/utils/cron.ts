@@ -5,7 +5,12 @@ import Log from './logger'
 import { randomPicker } from './randomPicker'
 
 export const scheduleCronJob = (
-  { channelId, schedule, message }: { channelId: string; schedule: string; message: string },
+  {
+    channelId,
+    schedule,
+    message,
+    ignoredMembers,
+  }: { channelId: string; schedule: string; message: string; ignoredMembers: string[] },
   slackAppInstance: App
 ) => {
   const newJob = {
@@ -14,11 +19,9 @@ export const scheduleCronJob = (
       schedule,
       () => {
         Log.info(`Running cron job for channelId ${channelId}`)
-        try {
-          void randomPicker({ channelId, message, slackAppInstance })
-        } catch (error) {
+        randomPicker({ channelId, message, ignoredMembers, slackAppInstance }).catch((error) => {
           Log.error(error)
-        }
+        })
       },
       {
         scheduled: true,

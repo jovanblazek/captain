@@ -26,13 +26,15 @@ const formatMessage = ({ message, moderators }: { message: string; moderators: s
 export const randomPicker = async ({
   channelId,
   message,
+  ignoredMembers = [],
   slackAppInstance,
 }: {
   channelId: string
   message: string
+  ignoredMembers?: string[]
   slackAppInstance: App
 }) => {
-  const moderators = await getModerators(channelId, slackAppInstance)
+  const moderators = await getModerators(channelId, ignoredMembers, slackAppInstance)
   if (!moderators || !moderators.length) {
     throw new Error('No moderators generated')
   }

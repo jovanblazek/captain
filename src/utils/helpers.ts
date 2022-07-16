@@ -1,4 +1,5 @@
 import { App } from '@slack/bolt'
+import { difference } from 'lodash'
 import Log from './logger'
 
 const MODERATOR_COUNT = 2
@@ -33,7 +34,11 @@ export const sendMessage = async ({
   })
 }
 
-export const getModerators = async (channelId: string, slackAppInstance: App) => {
+export const getModerators = async (
+  channelId: string,
+  ignoredMembers: string[],
+  slackAppInstance: App
+) => {
   try {
     // get channel member ids
     const { members: channelMembers } = await slackAppInstance.client.conversations.members({
@@ -44,9 +49,15 @@ export const getModerators = async (channelId: string, slackAppInstance: App) =>
       throw new Error('No channel members found while getting moderators')
     }
 
+    // filter out ignored members
+    const filteredChannelMembers = difference(channelMembers, ignoredMembers)
+    if (!filteredChannelMembers || !filteredChannelMembers.length) {
+      throw new Error('No members left to pick from')
+    }
+
     // get profile of every channel member
     const memberProfiles = await Promise.allSettled(
-      channelMembers.map((member) =>
+      filteredChannelMembers.map((member) =>
         slackAppInstance.client.users.info({
           user: member,
         })
@@ -64,7 +75,7 @@ export const getModerators = async (channelId: string, slackAppInstance: App) =>
       return acc
     }, [] as string[])
 
-    if (humanMembers.length === 0) {
+    if (!humanMembers.length) {
       throw new Error('No human channel members found while getting moderators')
     }
 

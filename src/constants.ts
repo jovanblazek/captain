@@ -14,6 +14,6 @@ export const BlockIds = {
   setup: {
     cron: 'cron',
     message: 'message',
-    prefixDate: 'prefixDate',
+    ignoredMembers: 'ignoredMembers',
   },
 }
