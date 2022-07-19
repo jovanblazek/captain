@@ -2,7 +2,6 @@ import { App } from '@slack/bolt'
 import { WebClient } from '@slack/web-api'
 import { getModerators, sendMessage } from '../helpers'
 
-// TODO add default mock behavior instead of mocking it every time
 jest.mock('@slack/web-api', () => {
   const mockedClient = {
     chat: {
@@ -10,7 +9,7 @@ jest.mock('@slack/web-api', () => {
       postEphemeral: jest.fn(),
     },
     conversations: {
-      members: jest.fn(),
+      members: jest.fn(() => ({ members: ['member1', 'member2', 'member3'] })),
     },
     users: {
       info: jest.fn(),
@@ -72,12 +71,14 @@ describe('Helpers unit tests', () => {
       usersInfoSpy = jest.spyOn(slackAppInstance.client.users, 'info')
     })
     beforeEach(() => {
+      usersInfoSpy.mockImplementation(({ user }) => ({
+        user: { is_bot: false, id: user },
+      }))
       jest.clearAllMocks()
     })
     it('should return null when no members are found in the channel', async () => {
       const channelId = '1234'
-
-      conversationMembersSpy.mockImplementation(() => ({ members: null }))
+      conversationMembersSpy.mockImplementationOnce(() => ({ members: null }))
       const moderators = await getModerators({ channelId }, slackAppInstance)
 
       expect(conversationMembersSpy).toHaveBeenCalledTimes(1)
@@ -91,20 +92,16 @@ describe('Helpers unit tests', () => {
 
     it('should return null if all users are bots', async () => {
       const channelId = '1234'
-      const members = ['member1', 'member2', 'member3']
-      conversationMembersSpy.mockImplementation(() => ({ members }))
       usersInfoSpy.mockImplementation(({ user }) => ({
         user: { is_bot: true, id: user },
       }))
       const moderators = await getModerators({ channelId }, slackAppInstance)
+      expect(slackAppInstance.client.users.info).toHaveBeenCalledTimes(3)
       expect(moderators).toStrictEqual(null)
     })
 
     it('should return array of moderators without bot users', async () => {
       const channelId = '1234'
-      const members = ['member1', 'member2', 'member3']
-
-      conversationMembersSpy.mockImplementation(() => ({ members }))
       usersInfoSpy.mockImplementation(({ user }) => ({
         user: { is_bot: user === 'member1', id: user },
       }))
@@ -124,13 +121,7 @@ describe('Helpers unit tests', () => {
 
     it('should return array of moderators without ignored members', async () => {
       const channelId = '1234'
-      const members = ['member1', 'member2', 'member3']
       const ignoredMembers = ['member2', 'member3']
-
-      conversationMembersSpy.mockImplementation(() => ({ members }))
-      usersInfoSpy.mockImplementation(({ user }) => ({
-        user: { is_bot: false, id: user },
-      }))
       const moderators = await getModerators({ channelId, ignoredMembers }, slackAppInstance)
 
       expect(slackAppInstance.client.conversations.members).toHaveBeenCalledTimes(1)
