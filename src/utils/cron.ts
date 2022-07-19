@@ -2,7 +2,7 @@ import { App } from '@slack/bolt'
 import cron from 'node-cron'
 import ScheduledJobs from '../classes/ScheduledJobs'
 import Log from './logger'
-import { randomPicker } from './randomPicker'
+import { picker } from './picker'
 
 export const scheduleCronJob = (
   {
@@ -19,7 +19,7 @@ export const scheduleCronJob = (
       schedule,
       () => {
         Log.info(`Running cron job for channelId ${channelId}`)
-        randomPicker({ channelId, message, ignoredMembers }, slackAppInstance).catch((error) => {
+        picker({ channelId, message, ignoredMembers }, slackAppInstance).catch((error) => {
           Log.error(error)
         })
       },
