@@ -1,22 +1,14 @@
 import { App } from '@slack/bolt'
 import { WebClient } from '@slack/web-api'
 import { times } from 'lodash'
-import { mockSlackApi } from '../../../mocks'
-import { getChannelMembersIds } from '../channelMembers'
-import { filterBots } from '../filterBots'
-import { filterIgnoredMembers } from '../filterIgnoredMembers'
-import { getRandomArrayElements } from '../getRandomArrayElements'
+import {
+  filterBots,
+  filterIgnoredMembers,
+  getChannelMembersIds,
+  getRandomArrayElements,
+} from '../utils'
 
 const ChannelMembers = times(3, String)
-
-mockSlackApi({
-  conversations: {
-    members: jest.fn(),
-  },
-  users: {
-    info: jest.fn(),
-  },
-})
 
 describe('picker utils', () => {
   const slackAppInstance = {} as App
