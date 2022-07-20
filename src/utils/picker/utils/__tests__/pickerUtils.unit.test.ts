@@ -1,11 +1,13 @@
 import { App } from '@slack/bolt'
 import { WebClient } from '@slack/web-api'
+import { times } from 'lodash'
 import { mockSlackApi } from '../../../mocks'
 import { getChannelMembersIds } from '../channelMembers'
+import { filterBots } from '../filterBots'
 import { filterIgnoredMembers } from '../filterIgnoredMembers'
 import { getRandomArrayElements } from '../getRandomArrayElements'
 
-const ChannelMembers = ['member1', 'member2', 'member3']
+const ChannelMembers = times(3, String)
 
 mockSlackApi({
   conversations: {
@@ -58,7 +60,7 @@ describe('picker utils', () => {
     })
   })
 
-  describe.skip('filterBots', () => {
+  describe('filterBots', () => {
     let usersInfoSpy: jest.SpyInstance
     beforeAll(() => {
       usersInfoSpy = jest.spyOn(slackAppInstance.client.users, 'info')
@@ -69,17 +71,35 @@ describe('picker utils', () => {
     beforeEach(() => {
       jest.clearAllMocks()
     })
-    it('should filter out bot members', () => {})
 
-    it('should throw error when no human members are found', () => {})
+    it('should return all members if they are not bots', async () => {
+      const result = await filterBots(ChannelMembers, slackAppInstance)
+      expect(usersInfoSpy).toHaveBeenCalledTimes(ChannelMembers.length)
+      expect(result).toStrictEqual(ChannelMembers)
+    })
+
+    it('should filter out bot members', async () => {
+      usersInfoSpy.mockImplementation(({ user }) => ({
+        user: { is_bot: user === ChannelMembers[0], id: user },
+      }))
+      const result = await filterBots(ChannelMembers, slackAppInstance)
+      expect(usersInfoSpy).toHaveBeenCalledTimes(ChannelMembers.length)
+      expect(result).toStrictEqual(ChannelMembers.slice(1))
+    })
+
+    it('should throw error when no human members are found', async () => {
+      usersInfoSpy.mockImplementation(({ user }) => ({
+        user: { is_bot: true, id: user },
+      }))
+      await expect(filterBots(ChannelMembers, slackAppInstance)).rejects.toThrow()
+      expect(usersInfoSpy).toHaveBeenCalledTimes(ChannelMembers.length)
+    })
   })
 
   describe('filterIgnoredMembers', () => {
-    const members = ['a', 'b', 'c']
-
     it.each([
-      [members, ['b'], ['a', 'c']],
-      [members, [], members],
+      [ChannelMembers, [ChannelMembers[0]], ChannelMembers.slice(1)],
+      [ChannelMembers, [], ChannelMembers],
     ])(
       'should retrun array without ignored members',
       (channelMembers, ignoredMembers, expected) => {
@@ -89,23 +109,31 @@ describe('picker utils', () => {
     )
 
     it('should throw error if there are no members left', () => {
-      expect(() => filterIgnoredMembers(members, members)).toThrow()
+      expect(() => filterIgnoredMembers(ChannelMembers, ChannelMembers)).toThrow()
     })
   })
 
   describe('getRandomArrayElements', () => {
-    it('should return defined number of elements', () => {
-      const array = [1, 2, 3, 4]
-      const requestedCount = 2
-      const result = getRandomArrayElements(array, requestedCount)
-      expect(result).toHaveLength(requestedCount)
-    })
+    const array = times(4, Number)
+    it.each`
+      requestedCount | expected
+      ${2}           | ${2}
+      ${10}          | ${array.length}
+      ${0}           | ${0}
+      ${-1}          | ${0}
+    `(
+      `should return $expected elements with array lenght ${array.length} and requested count $requestedCount`,
+      ({ requestedCount, expected }: { requestedCount: number; expected: number }) => {
+        const result = getRandomArrayElements(array, requestedCount)
+        expect(result).toHaveLength(expected)
+      }
+    )
 
-    it('should return all elements if requested count is greater than length', () => {
-      const array = [1, 2]
-      const requestedCount = 3
-      const result = getRandomArrayElements(array, requestedCount)
-      expect(result).toHaveLength(array.length)
+    it('should return no elements if array is empty', () => {
+      const emptyArray: string[] = []
+      const requestedCount = 1
+      const result = getRandomArrayElements(emptyArray, requestedCount)
+      expect(result).toHaveLength(0)
     })
   })
 })
