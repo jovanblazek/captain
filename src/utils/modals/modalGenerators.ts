@@ -20,12 +20,12 @@ export const getSetupModal = (metadata: { channelId: string }): ModalView => ({
         action_id: BlockIds.setup.cron,
         placeholder: {
           type: 'plain_text',
-          text: 'Cron string',
+          text: '* * * * *',
         },
       },
       label: {
         type: 'plain_text',
-        text: 'Cron',
+        text: 'Cron string',
       },
     },
     {
@@ -33,14 +33,14 @@ export const getSetupModal = (metadata: { channelId: string }): ModalView => ({
       block_id: BlockIds.setup.ignoredMembers,
       text: {
         type: 'mrkdwn',
-        text: 'Ignored users',
+        text: 'Ignored users (bots are ignored automatically)',
       },
       accessory: {
         action_id: BlockIds.setup.ignoredMembers,
         type: 'multi_users_select',
         placeholder: {
           type: 'plain_text',
-          text: 'Excluded users',
+          text: 'Select users to ignore when picking',
         },
       },
     },
