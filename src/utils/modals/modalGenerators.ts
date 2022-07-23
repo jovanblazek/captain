@@ -33,7 +33,7 @@ export const getSetupModal = (metadata: { channelId: string }): ModalView => ({
       block_id: BlockIds.setup.ignoredMembers,
       text: {
         type: 'mrkdwn',
-        text: 'Ignored users (bots are ignored automatically)',
+        text: '*Ignored users* (bots are ignored automatically)',
       },
       accessory: {
         action_id: BlockIds.setup.ignoredMembers,
@@ -58,6 +58,28 @@ export const getSetupModal = (metadata: { channelId: string }): ModalView => ({
       label: {
         type: 'plain_text',
         text: 'Message',
+      },
+    },
+    {
+      type: 'input',
+      block_id: BlockIds.setup.isLastPickExcluded,
+      optional: true,
+      element: {
+        type: 'checkboxes',
+        action_id: BlockIds.setup.isLastPickExcluded,
+        options: [
+          {
+            text: {
+              type: 'plain_text',
+              text: 'Exclude n.1 pick from following draw',
+            },
+            value: 'true',
+          },
+        ],
+      },
+      label: {
+        type: 'plain_text',
+        text: 'Options:',
       },
     },
   ],

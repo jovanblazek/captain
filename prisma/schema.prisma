@@ -11,11 +11,13 @@ datasource db {
 }
 
 model Cron {
-  id             Int       @id @default(autoincrement())
-  channelId      String    @unique @db.VarChar(255)
-  schedule       String    @db.VarChar(255)
-  message        String
-  ignoredMembers String
-  createdAt      DateTime  @default(now())
-  updatedAt      DateTime? @default(now()) @updatedAt
+  id                 Int       @id @default(autoincrement())
+  channelId          String    @unique @db.VarChar(255)
+  schedule           String    @db.VarChar(255)
+  message            String
+  ignoredMembers     String
+  lastPickedMembers  String
+  isLastPickExcluded Boolean   @default(false)
+  createdAt          DateTime  @default(now())
+  updatedAt          DateTime? @default(now()) @updatedAt
 }

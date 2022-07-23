@@ -15,5 +15,6 @@ export const BlockIds = {
     cron: 'cron',
     message: 'message',
     ignoredMembers: 'ignoredMembers',
+    isLastPickExcluded: 'isLastPickExcluded',
   },
 }

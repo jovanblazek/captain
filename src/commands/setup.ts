@@ -25,18 +25,41 @@ export const handleSetupModalSubmit = async (
     []
   )
   const ignoredMembersStringified = JSON.stringify(ignoredMembers)
+  const isLastPickExcluded =
+    get(
+      values,
+      [BlockIds.setup.isLastPickExcluded, BlockIds.setup.isLastPickExcluded, 'selected_options'],
+      []
+    ).length > 0
+  console.log({ isLastPickExcluded })
 
   const { channelId }: { channelId: string } = JSON.parse(body.view.private_metadata) ?? {}
 
   if (validate(schedule)) {
     await Prisma.cron.upsert({
       where: { channelId },
-      create: { channelId, schedule, message, ignoredMembers: ignoredMembersStringified },
-      update: { schedule, message, ignoredMembers: ignoredMembersStringified },
+      create: {
+        channelId,
+        schedule,
+        message,
+        ignoredMembers: ignoredMembersStringified,
+        lastPickedMembers: '[]',
+        isLastPickExcluded,
+      },
+      update: {
+        schedule,
+        message,
+        ignoredMembers: ignoredMembersStringified,
+        lastPickedMembers: '[]',
+        isLastPickExcluded,
+      },
     })
 
     ScheduledJobs.getInstance().removeChannelJobs(channelId)
-    scheduleCronJob({ channelId, schedule, ignoredMembers, message }, slackAppInstance)
+    scheduleCronJob(
+      { channelId, schedule, ignoredMembers, message, isLastPickExcluded },
+      slackAppInstance
+    )
 
     Log.info(`Upserted cron job for ${channelId} with schedule ${schedule}`)
     await sendMessage({ channelId, userId, text: 'Aye aye sir! 🫡' }, slackAppInstance)

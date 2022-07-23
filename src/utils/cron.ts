@@ -10,7 +10,14 @@ export const scheduleCronJob = (
     schedule,
     message,
     ignoredMembers,
-  }: { channelId: string; schedule: string; message: string; ignoredMembers: string[] },
+    isLastPickExcluded,
+  }: {
+    channelId: string
+    schedule: string
+    message: string
+    ignoredMembers: string[]
+    isLastPickExcluded: boolean
+  },
   slackAppInstance: App
 ) => {
   const newJob = {
@@ -19,9 +26,11 @@ export const scheduleCronJob = (
       schedule,
       () => {
         Log.info(`Running cron job for channelId ${channelId}`)
-        picker({ channelId, message, ignoredMembers }, slackAppInstance).catch((error) => {
-          Log.error(error)
-        })
+        picker({ channelId, message, ignoredMembers, isLastPickExcluded }, slackAppInstance).catch(
+          (error) => {
+            Log.error(error)
+          }
+        )
       },
       {
         scheduled: true,
