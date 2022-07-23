@@ -5,8 +5,8 @@ import { Command } from '../classes'
 import ScheduledJobs from '../classes/ScheduledJobs'
 import { BlockIds, CommandNames } from '../constants'
 import { scheduleCronJob } from '../utils/cron'
-import { sendMessage } from '../utils/helpers'
 import Log from '../utils/logger'
+import { sendMessage } from '../utils/messages'
 import { getSetupModal } from '../utils/modals/modalGenerators'
 import { Prisma } from '../utils/prismaClient'
 
@@ -19,29 +19,37 @@ export const handleSetupModalSubmit = async (
   const values = get(body, ['view', 'state', 'values'])
   const schedule = get(values, [BlockIds.setup.cron, BlockIds.setup.cron, 'value'])!
   const message = get(values, [BlockIds.setup.message, BlockIds.setup.message, 'value'])!
+  const ignoredMembers = get(
+    values,
+    [BlockIds.setup.ignoredMembers, BlockIds.setup.ignoredMembers, 'selected_users'],
+    []
+  )
+  const ignoredMembersStringified = JSON.stringify(ignoredMembers)
 
   const { channelId }: { channelId: string } = JSON.parse(body.view.private_metadata) ?? {}
 
   if (validate(schedule)) {
     await Prisma.cron.upsert({
       where: { channelId },
-      create: { channelId, schedule, message },
-      update: { schedule, message },
+      create: { channelId, schedule, message, ignoredMembers: ignoredMembersStringified },
+      update: { schedule, message, ignoredMembers: ignoredMembersStringified },
     })
 
     ScheduledJobs.getInstance().removeChannelJobs(channelId)
-    scheduleCronJob({ channelId, schedule, message }, slackAppInstance)
+    scheduleCronJob({ channelId, schedule, ignoredMembers, message }, slackAppInstance)
 
     Log.info(`Upserted cron job for ${channelId} with schedule ${schedule}`)
-    await sendMessage({ channelId, userId, text: 'Aye aye sir! 🫡', slackAppInstance })
+    await sendMessage({ channelId, userId, text: 'Aye aye sir! 🫡' }, slackAppInstance)
     return
   }
-  await sendMessage({
-    channelId,
-    userId,
-    text: 'Cron syntax error. Validate syntax at this <https://crontab.guru/|this site>.',
-    slackAppInstance,
-  })
+  await sendMessage(
+    {
+      channelId,
+      userId,
+      text: 'Cron syntax error. Validate syntax at this <https://crontab.guru/|this site>.',
+    },
+    slackAppInstance
+  )
 }
 
 export default new Command(
