@@ -7,6 +7,7 @@
     "dev": "ts-node-dev --transpile-only --respawn --exit-child src/index.ts",
     "test": "jest",
     "migrate": "prisma migrate deploy",
+    "generate-types": "prisma generate",
     "build": "tsc",
     "start": "cd build && node src/index.js"
   },

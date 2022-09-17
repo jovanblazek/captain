@@ -36,7 +36,7 @@ export const handleSetupModalSubmit = async (
     })
 
     ScheduledJobs.getInstance().removeChannelJobs(channelId)
-    scheduleCronJob({ channelId, schedule, ignoredMembers, message }, slackAppInstance)
+    scheduleCronJob(schedule, { channelId, ignoredMembers, message }, slackAppInstance)
 
     Log.info(`Upserted cron job for ${channelId} with schedule ${schedule}`)
     await sendMessage({ channelId, userId, text: 'Aye aye sir! 🫡' }, slackAppInstance)
