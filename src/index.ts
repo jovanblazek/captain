@@ -18,7 +18,7 @@ async function main() {
   const cronJobs = await Prisma.cron.findMany()
   cronJobs.forEach(({ channelId, schedule, ignoredMembers: ignoredMembersJson, message }) => {
     const ignoredMembers: string[] = JSON.parse(ignoredMembersJson) ?? []
-    scheduleCronJob({ channelId, schedule, ignoredMembers, message }, SlackAppInstance)
+    scheduleCronJob(schedule, { channelId, ignoredMembers, message }, SlackAppInstance)
   })
   Log.info(`Loaded ${cronJobs.length} cron jobs`)
   initModalHandler(SlackAppInstance)

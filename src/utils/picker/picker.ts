@@ -9,7 +9,7 @@ import {
 
 const MODERATOR_COUNT = 2
 
-interface PickerOptions {
+export interface PickerOptions {
   channelId: string
   message: string
   ignoredMembers?: string[]
