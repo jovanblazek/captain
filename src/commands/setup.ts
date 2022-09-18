@@ -5,28 +5,34 @@ import { Command } from '../classes'
 import ScheduledJobs from '../classes/ScheduledJobs'
 import { BlockIds, CommandNames } from '../constants'
 import { scheduleCronJob } from '../utils/cron'
+import { parseJson } from '../utils/formatters'
 import Log from '../utils/logger'
 import { sendMessage } from '../utils/messages'
 import { getSetupModal } from '../utils/modals/modalGenerators'
 import Prisma from '../utils/prismaClient'
+
+const getModalData = (body: SlackViewAction) => {
+  const values = get(body, ['view', 'state', 'values'])
+  return {
+    channelId: parseJson(get(body, ['view', 'private_metadata'])) as string,
+    userId: get(body, ['user', 'id']),
+    schedule: get(values, [BlockIds.setup.cron, BlockIds.setup.cron, 'value'])!,
+    message: get(values, [BlockIds.setup.message, BlockIds.setup.message, 'value'])!,
+    ignoredMembers: get(
+      values,
+      [BlockIds.setup.ignoredMembers, BlockIds.setup.ignoredMembers, 'selected_users'],
+      []
+    ),
+  }
+}
 
 export const handleSetupModalSubmit = async (
   { ack, body }: SlackViewMiddlewareArgs<SlackViewAction> & AllMiddlewareArgs,
   slackAppInstance: App
 ) => {
   await ack()
-  const userId = get(body, ['user', 'id'])
-  const values = get(body, ['view', 'state', 'values'])
-  const schedule = get(values, [BlockIds.setup.cron, BlockIds.setup.cron, 'value'])!
-  const message = get(values, [BlockIds.setup.message, BlockIds.setup.message, 'value'])!
-  const ignoredMembers = get(
-    values,
-    [BlockIds.setup.ignoredMembers, BlockIds.setup.ignoredMembers, 'selected_users'],
-    []
-  )
+  const { channelId, userId, schedule, message, ignoredMembers } = getModalData(body)
   const ignoredMembersStringified = JSON.stringify(ignoredMembers)
-
-  const { channelId }: { channelId: string } = JSON.parse(body.view.private_metadata) ?? {}
 
   if (validate(schedule)) {
     await Prisma.cron.upsert({
