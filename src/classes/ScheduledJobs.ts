@@ -18,6 +18,13 @@ export default class ScheduledJobs {
     return ScheduledJobs.instance
   }
 
+  /**
+   * @method `reset()` is used only to reset the instance between test cases
+   */
+  static reset() {
+    this.instance = new ScheduledJobs()
+  }
+
   private scheduledJobs: ScheduledJob[] = []
 
   addJob(job: ScheduledJob) {
