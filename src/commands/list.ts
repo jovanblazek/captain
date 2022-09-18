@@ -1,6 +1,6 @@
 import { Command } from '../classes'
 import { CommandNames } from '../constants'
-import { Prisma } from '../utils/prismaClient'
+import Prisma from '../utils/prismaClient'
 
 export default new Command(
   {

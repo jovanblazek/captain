@@ -3,4 +3,5 @@ module.exports = {
   preset: 'ts-jest',
   testEnvironment: 'node',
   testPathIgnorePatterns: ['<rootDir>/build/'],
+  setupFilesAfterEnv: ['<rootDir>/src/utils/prismaClientMock.ts'],
 }

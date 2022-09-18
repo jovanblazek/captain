@@ -8,7 +8,7 @@ import { scheduleCronJob } from '../utils/cron'
 import Log from '../utils/logger'
 import { sendMessage } from '../utils/messages'
 import { getSetupModal } from '../utils/modals/modalGenerators'
-import { Prisma } from '../utils/prismaClient'
+import Prisma from '../utils/prismaClient'
 
 export const handleSetupModalSubmit = async (
   { ack, body }: SlackViewMiddlewareArgs<SlackViewAction> & AllMiddlewareArgs,
