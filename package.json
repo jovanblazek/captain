@@ -10,7 +10,8 @@
     "generate-types": "prisma generate",
     "build": "tsc",
     "start": "cd build && node src/index.js",
-    "pre-commit": "eslint"
+    "lint": "eslint --ignore-path .gitignore --ext .js,.ts,.tsx .",
+    "prepare": "husky install"
   },
   "keywords": [],
   "author": "",
