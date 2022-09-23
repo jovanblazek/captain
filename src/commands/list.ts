@@ -15,7 +15,7 @@ export default new Command(
     const cronJobText =
       cronJobs
         .map(({ schedule, message }, index) => `${index + 1}. \`${schedule}\` - ${message}`)
-        .join('\n') || 'No sheduled jobs found. The map is definitely upside down 🗺 🤔'
+        .join('\n') || 'No scheduled jobs found. The map is definitely upside down 🗺 🤔'
     await respond(cronJobText)
   }
 )
