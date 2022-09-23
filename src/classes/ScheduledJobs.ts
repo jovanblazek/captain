@@ -28,7 +28,7 @@ export default class ScheduledJobs {
   private scheduledJobs: ScheduledJob[] = []
 
   addJob(job: ScheduledJob) {
-    this.scheduledJobs.push(job)
+    this.scheduledJobs = [...this.scheduledJobs, job]
   }
 
   getJobs() {
@@ -36,11 +36,12 @@ export default class ScheduledJobs {
   }
 
   removeChannelJobs(channelId: string) {
-    this.scheduledJobs
-      .filter((job) => job.channelId === channelId)
-      .forEach((job) => {
+    this.scheduledJobs = this.scheduledJobs.reduce((acc, job) => {
+      if (job.channelId === channelId) {
         job.cron.stop()
-      })
-    this.scheduledJobs = this.scheduledJobs.filter((job) => job.channelId !== channelId)
+        return acc
+      }
+      return [...acc, job]
+    }, [] as ScheduledJob[])
   }
 }

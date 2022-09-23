@@ -28,12 +28,10 @@ export const scheduleCronJob = (
       }
     ),
   }
+  ScheduledJobs.getInstance().removeChannelJobs(channelId)
   ScheduledJobs.getInstance().addJob(newJob)
 }
 
-// TODO test pre commit hook
-// TODO fixme
-// eslint-disable-next-line consistent-return
 export const initCronJobs = async (slackAppInstance: App) => {
   try {
     const cronJobs = await Prisma.cron.findMany()
@@ -44,6 +42,6 @@ export const initCronJobs = async (slackAppInstance: App) => {
     Log.info(`Loaded ${cronJobs.length} cron jobs`)
     return cronJobs.length
   } catch (error) {
-    Log.error('Error when loading cron jobs', error)
+    throw new Error(error as string)
   }
 }

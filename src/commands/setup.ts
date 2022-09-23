@@ -2,7 +2,6 @@ import { AllMiddlewareArgs, App, SlackViewAction, SlackViewMiddlewareArgs } from
 import { get } from 'lodash'
 import { validate } from 'node-cron'
 import { Command } from '../classes'
-import ScheduledJobs from '../classes/ScheduledJobs'
 import { BlockIds, CommandNames } from '../constants'
 import { scheduleCronJob } from '../utils/cron'
 import { parseJson } from '../utils/formatters'
@@ -34,17 +33,16 @@ export const handleSetupModalSubmit = async (
   const { channelId, userId, schedule, message, ignoredMembers } = getModalData(body)
   const ignoredMembersStringified = JSON.stringify(ignoredMembers)
 
+  // If the cron schedule is valid, save it to the database and schedule the job
   if (validate(schedule)) {
     await Prisma.cron.upsert({
       where: { channelId },
       create: { channelId, schedule, message, ignoredMembers: ignoredMembersStringified },
       update: { schedule, message, ignoredMembers: ignoredMembersStringified },
     })
-
-    ScheduledJobs.getInstance().removeChannelJobs(channelId)
-    scheduleCronJob(schedule, { channelId, ignoredMembers, message }, slackAppInstance)
-
     Log.info(`Upserted cron job for ${channelId} with schedule ${schedule}`)
+
+    scheduleCronJob(schedule, { channelId, ignoredMembers, message }, slackAppInstance)
     await sendMessage({ channelId, userId, text: 'Aye aye sir! 🫡' }, slackAppInstance)
     return
   }
