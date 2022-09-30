@@ -41,21 +41,5 @@ Captain will pick up to two human channel members in case one of them is unavail
 | `pick` | Run the picker manually |
 | `help` | Show help |
 
-## 💻 Environment Setup
-
-1. Copy `.env.example` file to `.env` file and fill in the values.
-2. Install the dependencies with `npm install`.
-3. Run `docker-compose up` to start the DB.
-4. Run `npm run migrate` to create the tables.
-5. Run `npm run dev` to start the bot.
-
-## 💿 Migrations
-
-After changing the prisma schema, create a migration using following command:
-
-
-```
-prisma migrate dev --name added_column
-```
-
-Whenever you make changes to your Prisma schema in the future, you manually need to invoke `prisma generate` in order to accommodate the changes in your Prisma Client API.
+## 💪 Contributing
+Captain is an open source project and contributions are welcome. Please read the [contributing guidelines](CONTRIBUTING.md) before contributing.
