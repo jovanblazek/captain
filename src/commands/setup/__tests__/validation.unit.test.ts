@@ -7,7 +7,7 @@ import {
   getModalData,
   UserInputType,
   validateSetupModalInput,
-} from '../validationSchema'
+} from '../validation'
 
 const mockUserInput = (overrides?: Partial<UserInputType>) => ({
   channelId: 'channelId',
@@ -18,7 +18,7 @@ const mockUserInput = (overrides?: Partial<UserInputType>) => ({
   ...(overrides || {}),
 })
 
-describe('setup validationSchema', () => {
+describe('setup command validation', () => {
   describe('validateSetupModalInput', () => {
     it('should run validation', () => {
       const input = mockUserInput()

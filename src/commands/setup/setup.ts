@@ -6,7 +6,7 @@ import Log from '../../utils/logger'
 import { sendMessage } from '../../utils/messages'
 import { getSetupModal } from '../../utils/modals/modalGenerators'
 import Prisma from '../../utils/prismaClient'
-import { generateErrorMessage, getModalData, validateSetupModalInput } from './validationSchema'
+import { generateErrorMessage, getModalData, validateSetupModalInput } from './validation'
 
 export const handleSetupModalSubmit = async (
   { ack, body }: SlackViewMiddlewareArgs<SlackViewAction> & AllMiddlewareArgs,
