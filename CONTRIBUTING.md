@@ -15,6 +15,7 @@ All Pull Requests are welcome but to ensure they get committed please make sure 
 - Brief description of the issue
 - Impacted areas of application for test focus
 - Ensure that tests are updated or new tests are added to properly cover the change in question
+- If you made changes to app permissions or commands, make sure to update `slack-app-manifest.yml`
 - If there is a dependency on another PR, include a reference number
 - End all files with a newline
 
