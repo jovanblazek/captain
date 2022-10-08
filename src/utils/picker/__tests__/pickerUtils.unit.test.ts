@@ -43,7 +43,9 @@ describe('picker utils', () => {
 
     it('should throw error if no members found', async () => {
       conversationMembersSpy.mockImplementationOnce(() => ({ members: null }))
-      await expect(getChannelMembersIds(channelId, slackAppInstance)).rejects.toThrow()
+      await expect(getChannelMembersIds(channelId, slackAppInstance)).rejects.toThrow(
+        'No channel members found while getting moderators'
+      )
       expect(conversationMembersSpy).toHaveBeenCalledTimes(1)
       expect(conversationMembersSpy).toHaveBeenCalledWith({
         channel: channelId,
@@ -83,7 +85,9 @@ describe('picker utils', () => {
       usersInfoSpy.mockImplementation(({ user }) => ({
         user: { is_bot: true, id: user },
       }))
-      await expect(filterBots(ChannelMembers, slackAppInstance)).rejects.toThrow()
+      await expect(filterBots(ChannelMembers, slackAppInstance)).rejects.toThrow(
+        'No human channel members found while getting moderators'
+      )
       expect(usersInfoSpy).toHaveBeenCalledTimes(ChannelMembers.length)
     })
   })
@@ -101,7 +105,9 @@ describe('picker utils', () => {
     )
 
     it('should throw error if there are no members left', () => {
-      expect(() => filterIgnoredMembers(ChannelMembers, ChannelMembers)).toThrow()
+      expect(() => filterIgnoredMembers(ChannelMembers, ChannelMembers)).toThrow(
+        'No members left to pick from'
+      )
     })
   })
 
