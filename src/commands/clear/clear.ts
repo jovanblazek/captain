@@ -1,7 +1,7 @@
-import { Command } from '../../classes'
-import ScheduledJobs from '../../classes/ScheduledJobs'
+import Command from 'classes/Command'
+import ScheduledJobs from 'classes/ScheduledJobs'
+import Prisma from 'utils/prismaClient'
 import { CommandNames } from '../../constants'
-import Prisma from '../../utils/prismaClient'
 
 export default new Command(
   {

@@ -1,6 +1,6 @@
 import { App } from '@slack/bolt'
 import { reduce } from 'lodash'
-import { CommandHandlerArgs } from '../classes'
+import { CommandHandlerArgs } from '../classes/Command'
 import { Commands } from '../commands'
 import { CommandNames } from '../constants'
 import Log from './logger'

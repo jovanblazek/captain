@@ -1,4 +1,4 @@
-import { Command } from '../../classes'
+import Command from '../../classes/Command'
 import { CommandNames } from '../../constants'
 import Log from '../../utils/logger'
 import { picker } from '../../utils/picker'

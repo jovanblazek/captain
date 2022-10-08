@@ -1,5 +1,5 @@
 import { AllMiddlewareArgs, App, SlackViewAction, SlackViewMiddlewareArgs } from '@slack/bolt'
-import { Command } from '../../classes'
+import Command from '../../classes/Command'
 import { CommandNames } from '../../constants'
 import { scheduleCronJob } from '../../utils/cron'
 import Log from '../../utils/logger'
