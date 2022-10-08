@@ -1,7 +1,7 @@
 import { Cron } from '@prisma/client'
 import { App } from '@slack/bolt'
-import { mockSlackCommandMiddleware } from 'commands/__tests__/commandMiddleware'
-import { PrismaMock } from 'utils/prismaClientMock'
+import { mockSlackCommandMiddleware } from 'utils/testing/commandMiddleware'
+import { PrismaMock } from 'utils/testing/prismaClientMock'
 import ListCommand from '../list'
 
 describe('List command', () => {

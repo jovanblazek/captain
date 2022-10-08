@@ -1,6 +1,6 @@
 import { App } from '@slack/bolt'
 import * as cron from '../cron'
-import { PrismaMock } from '../prismaClientMock'
+import { PrismaMock } from '../testing/prismaClientMock'
 
 describe('cron', () => {
   describe('initCronJobs', () => {

@@ -1,7 +1,7 @@
 import { App } from '@slack/bolt'
 import ScheduledJobs from 'classes/ScheduledJobs'
-import { mockSlackCommandMiddleware } from 'commands/__tests__/commandMiddleware'
-import { PrismaMock } from 'utils/prismaClientMock'
+import { mockSlackCommandMiddleware } from 'utils/testing/commandMiddleware'
+import { PrismaMock } from 'utils/testing/prismaClientMock'
 import ClearCommand from '../clear'
 
 describe('Clear command', () => {
