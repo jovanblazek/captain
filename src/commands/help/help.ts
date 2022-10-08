@@ -1,9 +1,9 @@
-import { Command } from '../classes'
-import { CommandNames } from '../constants'
-import ClearCommand from './clear'
-import ListCommand from './list'
-import PickCommand from './pick'
-import SetupCommand from './setup'
+import { Command } from '../../classes'
+import { CommandNames } from '../../constants'
+import { ClearCommand } from '../clear'
+import { ListCommand } from '../list'
+import { PickCommand } from '../pick'
+import SetupCommand from '../setup'
 
 const HelpCommand = new Command(
   {
