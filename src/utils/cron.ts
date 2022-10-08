@@ -1,6 +1,6 @@
 import { App } from '@slack/bolt'
+import ScheduledJobs from 'classes/ScheduledJobs'
 import cron from 'node-cron'
-import ScheduledJobs from '../classes/ScheduledJobs'
 import { parseJson } from './formatters'
 import Log from './logger'
 import { picker, PickerOptions } from './picker'

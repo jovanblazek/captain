@@ -1,9 +1,9 @@
-import { initCommandHandler } from './utils/commandHandler'
-import { initCronJobs } from './utils/cron'
-import Log from './utils/logger'
-import { initModalHandler } from './utils/modals/modalHandler'
-import Prisma from './utils/prismaClient'
-import createSlackApp from './utils/slackApp'
+import { initCommandHandler } from 'utils/commandHandler'
+import { initCronJobs } from 'utils/cron'
+import Log from 'utils/logger'
+import { initModalHandler } from 'utils/modals/modalHandler'
+import Prisma from 'utils/prismaClient'
+import createSlackApp from 'utils/slackApp'
 import '../config/environment'
 
 const { PORT } = process.env

@@ -2,8 +2,8 @@ import { SlackViewAction } from '@slack/bolt'
 import { get, reduce } from 'lodash'
 import { validate } from 'node-cron'
 import { typeToFlattenedError, z } from 'zod'
+import { parseJson } from 'utils/formatters'
 import { BlockIds } from '../../constants'
-import { parseJson } from '../../utils/formatters'
 
 export type UserInputType = z.infer<typeof SetupModalValidationSchema>
 

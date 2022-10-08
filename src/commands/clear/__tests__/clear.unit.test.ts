@@ -1,6 +1,6 @@
 import { App, SlackCommandMiddlewareArgs } from '@slack/bolt'
-import ScheduledJobs from '../../../classes/ScheduledJobs'
-import { PrismaMock } from '../../../utils/prismaClientMock'
+import ScheduledJobs from 'classes/ScheduledJobs'
+import { PrismaMock } from 'utils/prismaClientMock'
 import ClearCommand from '../clear'
 
 const mockSlackCommandMiddleware = ({ channelId }: { channelId: string }) => ({

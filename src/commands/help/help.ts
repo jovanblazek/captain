@@ -1,4 +1,4 @@
-import Command from '../../classes/Command'
+import Command from 'classes/Command'
 import { CommandNames } from '../../constants'
 import { ClearCommand } from '../clear'
 import { ListCommand } from '../list'

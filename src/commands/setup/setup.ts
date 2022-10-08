@@ -1,11 +1,11 @@
 import { AllMiddlewareArgs, App, SlackViewAction, SlackViewMiddlewareArgs } from '@slack/bolt'
-import Command from '../../classes/Command'
+import Command from 'classes/Command'
+import { scheduleCronJob } from 'utils/cron'
+import Log from 'utils/logger'
+import { sendMessage } from 'utils/messages'
+import { getSetupModal } from 'utils/modals/modalGenerators'
+import Prisma from 'utils/prismaClient'
 import { CommandNames } from '../../constants'
-import { scheduleCronJob } from '../../utils/cron'
-import Log from '../../utils/logger'
-import { sendMessage } from '../../utils/messages'
-import { getSetupModal } from '../../utils/modals/modalGenerators'
-import Prisma from '../../utils/prismaClient'
 import { generateErrorMessage, getModalData, validateSetupModalInput } from './validation'
 
 export const handleSetupModalSubmit = async (
