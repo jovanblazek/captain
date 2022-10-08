@@ -1,15 +1,8 @@
-import { App, SlackCommandMiddlewareArgs } from '@slack/bolt'
+import { App } from '@slack/bolt'
 import ScheduledJobs from 'classes/ScheduledJobs'
+import { mockSlackCommandMiddleware } from 'commands/__tests__/commandMiddleware'
 import { PrismaMock } from 'utils/prismaClientMock'
 import ClearCommand from '../clear'
-
-const mockSlackCommandMiddleware = ({ channelId }: { channelId: string }) => ({
-  ack: jest.fn(),
-  command: {
-    channel_id: channelId,
-  },
-  respond: jest.fn(),
-})
 
 describe('Clear command', () => {
   const slackAppInstance = {} as App
@@ -20,7 +13,7 @@ describe('Clear command', () => {
   const channelId = 'channelId'
   const mockedSlackCommandMiddleware = mockSlackCommandMiddleware({
     channelId,
-  }) as unknown as SlackCommandMiddlewareArgs
+  })
 
   beforeEach(() => {
     jest.clearAllMocks()
