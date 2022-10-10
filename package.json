@@ -1,5 +1,5 @@
 {
-  "name": "slack-picker",
+  "name": "captain",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -14,8 +14,8 @@
     "prepare": "husky install"
   },
   "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "author": "jovanblazek",
+  "license": "MIT",
   "devDependencies": {
     "@slack-wrench/jest-bolt-receiver": "^3.0.0",
     "@slack-wrench/jest-mock-web-client": "^1.4.0",
@@ -30,7 +30,7 @@
     "eslint-config-airbnb-typescript": "^17.0.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-import": "^2.26.0",
-    "eslint-plugin-jest": "^27.0.4",
+    "eslint-plugin-jest": "^26.8.7",
     "eslint-plugin-prettier": "^4.2.1",
     "eslint-plugin-simple-import-sort": "^8.0.0",
     "husky": "^8.0.0",
