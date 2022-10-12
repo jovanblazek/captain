@@ -19,7 +19,7 @@
   "devDependencies": {
     "@slack-wrench/jest-bolt-receiver": "^3.0.0",
     "@slack-wrench/jest-mock-web-client": "^1.4.0",
-    "@sudolabs-io/eslint-config-sudolabs": "^1.5.88",
+    "@sudolabs-io/eslint-config-sudolabs": "1.5.97",
     "@types/jest": "^29.0.3",
     "@types/lodash": "^4.14.185",
     "@types/node-cron": "^3.0.4",
@@ -32,7 +32,7 @@
     "eslint-plugin-import": "^2.26.0",
     "eslint-plugin-jest": "^26.8.7",
     "eslint-plugin-prettier": "^4.2.1",
-    "eslint-plugin-simple-import-sort": "^8.0.0",
+    "eslint-plugin-simple-import-sort": "^7.0.0",
     "husky": "^8.0.0",
     "jest": "^29.0.3",
     "jest-mock-extended": "^3.0.1",
