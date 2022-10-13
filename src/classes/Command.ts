@@ -10,7 +10,7 @@ export type CommandHandlerArgs = (
   slackAppInstance: App
 ) => Promise<void>
 
-export class Command {
+export default class Command {
   params: CommandParametersArgs
   handler: CommandHandlerArgs
 

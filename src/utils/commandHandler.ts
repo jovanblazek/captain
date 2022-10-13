@@ -1,8 +1,7 @@
 import { App } from '@slack/bolt'
+import { CommandHandlerArgs } from 'classes/Command'
 import { reduce } from 'lodash'
-import { CommandHandlerArgs } from '../classes'
 import { Commands } from '../commands'
-import helpCommand from '../commands/help'
 import { CommandNames } from '../constants'
 import Log from './logger'
 
@@ -22,10 +21,6 @@ export const initCommandHandler = (slackAppInstance: App) => {
         if (CommandHandlers[commandName]) {
           await CommandHandlers[commandName](args, slackAppInstance)
           return
-        }
-
-        if (commandName === CommandNames.help) {
-          await helpCommand.handler(args, slackAppInstance)
         }
       } catch (error) {
         Log.error('Error in command handler', error)

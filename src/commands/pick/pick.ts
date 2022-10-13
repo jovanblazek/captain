@@ -1,7 +1,7 @@
-import { Command } from '../classes'
-import { CommandNames } from '../constants'
-import Log from '../utils/logger'
-import { picker } from '../utils/picker'
+import Command from 'classes/Command'
+import Log from 'utils/logger'
+import { picker } from 'utils/picker'
+import { CommandNames } from '../../constants'
 
 const DEFAULT_MESSAGE = 'I choose you!'
 
