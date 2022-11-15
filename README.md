@@ -18,7 +18,7 @@
 </div>
 
 ## 🎯 What is Captain?
-Captain is a slack bot that allows you to automatically pick a random channel member, for example to moderate daily standup meeting.
+Captain is a slack bot that allows you to automatically pick a random channel member, for example to moderate daily standup meetings.
 
 1. Add Captain to the channel
 2. Setup a schedule using the `/setup` command with the CRON syntax
@@ -42,4 +42,4 @@ Captain will pick up to two human channel members in case one of them is unavail
 | `help` | Show help |
 
 ## 💪 Contributing
-Captain is an open source project and contributions are welcome. Please read the [contributing guidelines](CONTRIBUTING.md) before contributing.
+Captain is an open-source project and contributions are welcome. Please read the [contributing guidelines](CONTRIBUTING.md) before contributing.

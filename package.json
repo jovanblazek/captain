@@ -7,6 +7,7 @@
     "dev": "ts-node-dev --transpile-only --respawn --exit-child -r tsconfig-paths/register src/index.ts",
     "test": "jest",
     "migrate": "prisma migrate deploy",
+    "migrate:dev": "prisma migrate dev",
     "generate-types": "prisma generate",
     "build": "tsc",
     "start": "TS_NODE_BASEURL=./build/src node -r tsconfig-paths/register build/src/index.js",
