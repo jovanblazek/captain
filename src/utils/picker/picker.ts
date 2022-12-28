@@ -8,10 +8,11 @@ import {
 } from './utils'
 
 const MODERATOR_COUNT = 2
+const DEFAULT_MESSAGE = 'Here are the results:'
 
 export interface PickerOptions {
   channelId: string
-  message: string
+  message?: string | null
   ignoredMembers?: string[]
 }
 
@@ -31,7 +32,7 @@ export const picker = async (
   await sendMessage(
     {
       channelId,
-      text: `${formatMessage({ message, moderators })}`,
+      text: `${formatMessage({ message: message ?? DEFAULT_MESSAGE, moderators })}`,
     },
     slackAppInstance
   )

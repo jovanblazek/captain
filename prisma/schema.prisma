@@ -7,12 +7,42 @@ datasource db {
   url      = env("POSTGRES_CONNECTION_STRING")
 }
 
+// model Cron {
+//   id             Int       @id @default(autoincrement())
+//   channelId      String    @unique @db.VarChar(255)
+//   schedule       String    @db.VarChar(255)
+//   message        String
+//   ignoredMembers String    @default("[]")
+//   createdAt      DateTime  @default(now())
+//   updatedAt      DateTime? @default(now()) @updatedAt
+// }
+
 model Cron {
-  id             Int       @id @default(autoincrement())
-  channelId      String    @unique @db.VarChar(255)
-  schedule       String    @db.VarChar(255)
-  message        String
-  ignoredMembers String    @default("[]")
+  id          Int          @id @unique @default(autoincrement())
+  schedule    String
+  channelId   String
+  name        String       @default("Unnamed")
+  message     String?
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime?    @default(now()) @updatedAt
+  MembersCron MembersCron?
+  TextCron    TextCron?
+}
+
+model MembersCron {
+  id             Int       @id @unique @default(autoincrement())
+  cron           Cron      @relation(fields: [cronId], references: [id])
+  cronId         Int       @unique
+  ignoredMembers String[]  @default([])
   createdAt      DateTime  @default(now())
   updatedAt      DateTime? @default(now()) @updatedAt
+}
+
+model TextCron {
+  id        Int       @id @unique @default(autoincrement())
+  cron      Cron      @relation(fields: [cronId], references: [id])
+  cronId    Int       @unique
+  options   String[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @default(now()) @updatedAt
 }

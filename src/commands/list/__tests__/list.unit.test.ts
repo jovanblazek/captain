@@ -19,11 +19,11 @@ describe('List command', () => {
   it('should list scheduled jobs in channel', async () => {
     PrismaMock.cron.findMany.mockResolvedValue([
       {
-        message: 'message1',
+        name: 'cron1',
         schedule: '1 * * * *',
       },
       {
-        message: 'message2',
+        name: 'cron2',
         schedule: '2 * * * *',
       },
     ] as Cron[])
@@ -31,7 +31,7 @@ describe('List command', () => {
     await ListCommand.handler(mockedSlackCommandMiddleware, slackAppInstance)
     expect(mockedSlackCommandMiddleware.ack).toHaveBeenCalled()
     expect(mockedSlackCommandMiddleware.respond).toHaveBeenCalledWith(
-      '1. `1 * * * *` - message1\n2. `2 * * * *` - message2'
+      '1. `1 * * * *` - cron1\n2. `2 * * * *` - cron2'
     )
   })
 
