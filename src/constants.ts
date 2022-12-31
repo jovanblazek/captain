@@ -17,3 +17,7 @@ export const BlockIds = {
     ignoredMembers: 'ignoredMembers',
   },
 }
+
+export const ActionIds = {
+  addToChannelButton: 'addToChannelButton',
+}

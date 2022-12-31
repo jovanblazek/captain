@@ -1,3 +1,4 @@
+import { initEventListeners } from 'slack/events'
 import { initCommandHandler } from 'utils/commandHandler'
 import { initCronJobs } from 'utils/cron'
 import Log from 'utils/logger'
@@ -14,6 +15,7 @@ async function main() {
   await SlackAppInstance.start()
   initCommandHandler(SlackAppInstance)
   initModalHandler(SlackAppInstance)
+  initEventListeners(SlackAppInstance)
   await initCronJobs(SlackAppInstance)
   Log.info(`Slack bot server is running. API is listening on port ${PORT || ''}`)
 }
