@@ -11,6 +11,7 @@ export default new Command(
   async ({ ack, command, respond }) => {
     await ack()
     const { channel_id: channelId } = command
+    // TODO rework to support multiple crons per channel
     const { count } = await Prisma.cron.deleteMany({
       where: { channelId: { equals: channelId } },
     })

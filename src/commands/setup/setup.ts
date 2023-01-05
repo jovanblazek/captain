@@ -1,6 +1,6 @@
 import { AllMiddlewareArgs, App, SlackViewAction, SlackViewMiddlewareArgs } from '@slack/bolt'
 import Command from 'classes/Command'
-import { scheduleCronJob } from 'utils/cron'
+import { scheduleMemberCron } from 'cron/crons'
 import Log from 'utils/logger'
 import { sendMessage } from 'utils/messages'
 import { getSetupModal } from 'utils/modals/modalGenerators'
@@ -20,14 +20,41 @@ export const handleSetupModalSubmit = async (
     const { channelId, userId, schedule, message, ignoredMembers } = validationResult.data
     const ignoredMembersStringified = JSON.stringify(ignoredMembers)
 
-    await Prisma.cron.upsert({
-      where: { channelId },
-      create: { channelId, schedule, message, ignoredMembers: ignoredMembersStringified },
-      update: { schedule, message, ignoredMembers: ignoredMembersStringified },
+    const savedCron = await Prisma.cron.upsert({
+      where: {
+        id: 10, // TODO change for real value
+      },
+      create: {
+        channelId,
+        schedule,
+        message,
+        MembersCron: {
+          create: {
+            ignoredMembers: ignoredMembersStringified,
+          },
+        },
+      },
+      update: {
+        schedule,
+        message,
+        MembersCron: {
+          update: {
+            ignoredMembers: ignoredMembersStringified,
+          },
+        },
+      },
+      include: {
+        MembersCron: true,
+      },
     })
     Log.info(`Upserted cron job for ${channelId} with schedule ${schedule}`)
 
-    scheduleCronJob(schedule, { channelId, ignoredMembers, message }, slackAppInstance)
+    scheduleMemberCron(savedCron, {
+      ignoredMembers: savedCron.MembersCron?.ignoredMembers,
+      slackAppInstance,
+    })
+
+    // scheduleCronJob(schedule, { channelId, ignoredMembers, message }, slackAppInstance)
     await sendMessage({ channelId, userId, text: 'Aye aye sir! 🫡' }, slackAppInstance)
     return
   }
