@@ -11,7 +11,7 @@ export default new Command(
     await ack()
     // TODO add a button to the list which opens a modal to edit the job and a button to delete the job
     const cronJobs = await Prisma.cron.findMany({
-      where: { channelId: { equals: command.channel_id } },
+      where: { channelId: { equals: command.channel_id }, teamId: { equals: command.team_id } },
     })
     const cronJobText =
       cronJobs

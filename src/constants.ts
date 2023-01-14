@@ -21,3 +21,10 @@ export const BlockIds = {
 export const ActionIds = {
   addToChannelButton: 'addToChannelButton',
 }
+
+export const CronTypes = {
+  member: 'member',
+  text: 'text',
+} as const
+
+export type CronType = typeof CronTypes[keyof typeof CronTypes]
