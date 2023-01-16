@@ -1,8 +1,8 @@
 import { initCronJobs } from 'cron/initCrons'
 import { initEventListeners } from 'slack/events'
+import { initModalSubmitListeners } from 'slack/modals'
 import { initCommandHandler } from 'utils/commandHandler'
 import Log from 'utils/logger'
-import { initModalHandler } from 'utils/modals/modalHandler'
 import Prisma from 'utils/prismaClient'
 import createSlackApp from 'utils/slackApp'
 import '../config/environment'
@@ -14,7 +14,7 @@ const SlackAppInstance = createSlackApp()
 async function main() {
   await SlackAppInstance.start()
   initCommandHandler(SlackAppInstance)
-  initModalHandler(SlackAppInstance)
+  initModalSubmitListeners(SlackAppInstance)
   initEventListeners(SlackAppInstance)
   await initCronJobs(SlackAppInstance)
   Log.info(`Slack bot server is running. API is listening on port ${PORT || ''}`)

@@ -1,8 +1,8 @@
 import { AllMiddlewareArgs, App, SlackViewAction, SlackViewMiddlewareArgs } from '@slack/bolt'
 import Command from 'classes/Command'
+import { generateSetupModal } from 'slack/modals/setupModal'
 import { typeToFlattenedError } from 'zod'
 import { sendMessage } from 'utils/messages'
-import { getSetupModal } from 'utils/modals/modalGenerators'
 import { CommandNames, CronTypes } from '../../constants'
 import { memberCronSetup } from './memberCron/memberCronSetup'
 import { generateErrorMessage, getSetupModalCronData } from './validation'
@@ -43,7 +43,7 @@ export default new Command(
 
     await slackAppInstance.client.views.open({
       trigger_id: payload.trigger_id,
-      view: getSetupModal({ channelId: payload.channel_id }),
+      view: generateSetupModal({ channelId: payload.channel_id }),
     })
   }
 )
