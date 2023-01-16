@@ -1,8 +1,8 @@
 import Command from 'classes/Command'
 import { get } from 'lodash'
+import { ActionIds, CommandNames } from 'constants/slack'
 import Log from 'utils/logger'
 import { picker } from 'utils/picker'
-import { ActionIds, CommandNames } from '../../constants'
 
 const DEFAULT_MESSAGE = 'I choose you!'
 

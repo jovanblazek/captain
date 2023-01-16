@@ -2,8 +2,8 @@ import { SlackViewAction } from '@slack/bolt'
 import { get, reduce } from 'lodash'
 import { validate } from 'node-cron'
 import { typeToFlattenedError, z } from 'zod'
+import { BlockIds } from 'constants/slack'
 import { parseJson } from 'utils/formatters'
-import { BlockIds } from '../../constants'
 
 export const CronBaseFieldValidationSchema = {
   cronId: z.number().optional(),

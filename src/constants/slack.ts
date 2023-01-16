@@ -4,11 +4,11 @@ export const CommandNames = {
   clear: '/clear',
   pick: '/pick',
   help: '/help',
-}
+} as const
 
 export const ModalIds = {
   setup: 'setupModal',
-}
+} as const
 
 export const BlockIds = {
   setup: {
@@ -16,15 +16,8 @@ export const BlockIds = {
     message: 'message',
     ignoredMembers: 'ignoredMembers',
   },
-}
+} as const
 
 export const ActionIds = {
   addToChannelButton: 'addToChannelButton',
-}
-
-export const CronTypes = {
-  member: 'member',
-  text: 'text',
 } as const
-
-export type CronType = typeof CronTypes[keyof typeof CronTypes]

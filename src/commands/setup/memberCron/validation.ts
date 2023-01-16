@@ -1,7 +1,7 @@
 import { SlackViewAction } from '@slack/bolt'
 import { get } from 'lodash'
 import { z } from 'zod'
-import { BlockIds } from '../../../constants'
+import { BlockIds } from 'constants/slack'
 import { CronBaseFieldValidationSchema, getSetupModalCronData } from '../validation'
 
 export type MemberCronSetupUserInput = z.infer<typeof MemberCronSetupValidationSchema>

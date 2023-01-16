@@ -1,8 +1,8 @@
 import { App } from '@slack/bolt'
 import { CommandHandlerArgs } from 'classes/Command'
 import { reduce } from 'lodash'
+import { CommandNames } from 'constants/slack'
 import { Commands } from '../commands'
-import { CommandNames } from '../constants'
 import Log from './logger'
 
 const CommandHandlers: { [key: string]: CommandHandlerArgs } = reduce(

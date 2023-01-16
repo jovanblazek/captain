@@ -1,5 +1,5 @@
 import { App, InteractiveButtonClick } from '@slack/bolt'
-import { ActionIds } from '../../constants'
+import { ActionIds } from 'constants/slack'
 
 export const addToChannelButtonListener = (slackAppInstance: App) => {
   slackAppInstance.action<InteractiveButtonClick>(

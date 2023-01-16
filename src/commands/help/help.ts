@@ -1,5 +1,5 @@
 import Command from 'classes/Command'
-import { CommandNames } from '../../constants'
+import { CommandNames } from 'constants/slack'
 import { ClearCommand } from '../clear'
 import { ListCommand } from '../list'
 import { PickCommand } from '../pick'

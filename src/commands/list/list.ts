@@ -1,6 +1,6 @@
 import Command from 'classes/Command'
+import { CommandNames } from 'constants/slack'
 import Prisma from 'utils/prismaClient'
-import { CommandNames } from '../../constants'
 
 export default new Command(
   {

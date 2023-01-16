@@ -2,8 +2,9 @@ import { AllMiddlewareArgs, App, SlackViewAction, SlackViewMiddlewareArgs } from
 import Command from 'classes/Command'
 import { generateSetupModal } from 'slack/modals/setupModal'
 import { typeToFlattenedError } from 'zod'
+import { CronTypes } from 'constants/common'
+import { CommandNames } from 'constants/slack'
 import { sendMessage } from 'utils/messages'
-import { CommandNames, CronTypes } from '../../constants'
 import { memberCronSetup } from './memberCron/memberCronSetup'
 import { generateErrorMessage, getSetupModalCronData } from './validation'
 
