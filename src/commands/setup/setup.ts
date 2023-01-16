@@ -4,6 +4,7 @@ import { generateSetupModal } from 'slack/modals/setupModal'
 import { typeToFlattenedError } from 'zod'
 import { CronTypes } from 'constants/common'
 import { CommandNames } from 'constants/slack'
+import Log from 'utils/logger'
 import { sendMessage } from 'utils/messages'
 import { memberCronSetup } from './memberCron/memberCronSetup'
 import { generateErrorMessage, getSetupModalCronData } from './validation'
@@ -20,6 +21,7 @@ export const handleSetupModalSubmit = async (
     validationResult = await memberCronSetup(body, slackAppInstance)
   } else if (type === CronTypes.text) {
     // TODO
+    Log.debug('Running text cron setup')
   }
 
   if (validationResult && channelId && userId) {

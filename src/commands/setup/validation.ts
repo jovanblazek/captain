@@ -2,7 +2,7 @@ import { SlackViewAction } from '@slack/bolt'
 import { get, reduce } from 'lodash'
 import { validate } from 'node-cron'
 import { typeToFlattenedError, z } from 'zod'
-import { BlockIds } from 'constants/slack'
+import { ActionIds, BlockIds } from 'constants/slack'
 import { parseJson } from 'utils/formatters'
 
 export const CronBaseFieldValidationSchema = {
@@ -25,11 +25,16 @@ export const getSetupModalCronData = (body: SlackViewAction): z.infer<typeof Bas
   )!
   return {
     cronId,
-    type: 'member', // TODO add select for this
+    type: get(values, [
+      BlockIds.setupModal.cronType,
+      ActionIds.setupModal.cronType,
+      'selected_option',
+      'value',
+    ])!,
     channelId,
     userId: get(body, ['user', 'id']),
-    schedule: get(values, [BlockIds.setup.cron, BlockIds.setup.cron, 'value'])!,
-    message: get(values, [BlockIds.setup.message, BlockIds.setup.message, 'value'])!,
+    schedule: get(values, [BlockIds.setupModal.cron, ActionIds.setupModal.cron, 'value'])!,
+    message: get(values, [BlockIds.setupModal.message, ActionIds.setupModal.message, 'value'])!,
   }
 }
 

@@ -17,7 +17,11 @@ export const getModalData = (body: SlackViewAction): MemberCronSetupUserInput =>
     ...getSetupModalCronData(body),
     ignoredMembers: get(
       values,
-      [BlockIds.setup.ignoredMembers, BlockIds.setup.ignoredMembers, 'selected_users'],
+      [
+        BlockIds.setupModal.memberCron.ignoredMembers,
+        BlockIds.setupModal.memberCron.ignoredMembers,
+        'selected_users',
+      ],
       []
     ),
   }

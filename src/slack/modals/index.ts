@@ -1,6 +1,7 @@
 import { App } from '@slack/bolt'
-import { setupModalSubmitListener } from './setupModal'
+import { setupModalFieldsListener, setupModalSubmitListener } from './setupModal'
 
-export const initModalSubmitListeners = (slackAppInstance: App) => {
+export const initModalListeners = (slackAppInstance: App) => {
   setupModalSubmitListener(slackAppInstance)
+  setupModalFieldsListener(slackAppInstance)
 }

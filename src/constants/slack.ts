@@ -11,13 +11,30 @@ export const ModalIds = {
 } as const
 
 export const BlockIds = {
-  setup: {
+  setupModal: {
+    cronType: 'cronType',
     cron: 'cron',
     message: 'message',
-    ignoredMembers: 'ignoredMembers',
+    memberCron: {
+      ignoredMembers: 'ignoredMembers',
+    },
+    textCron: {
+      sourceText: 'sourceText',
+    },
   },
 } as const
 
 export const ActionIds = {
   addToChannelButton: 'addToChannelButton',
+  setupModal: {
+    cronType: 'cronType',
+    cron: 'cron',
+    message: 'message',
+    memberCron: {
+      ignoredMembers: 'ignoredMembers',
+    },
+    textCron: {
+      sourceText: 'sourceText',
+    },
+  },
 } as const
