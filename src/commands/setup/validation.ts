@@ -1,7 +1,7 @@
 import { SlackViewAction } from '@slack/bolt'
-import { get, reduce } from 'lodash'
+import { get } from 'lodash'
 import { validate } from 'node-cron'
-import { typeToFlattenedError, z } from 'zod'
+import { z } from 'zod'
 import { ActionIds, BlockIds } from 'constants/slack'
 import { parseJson } from 'utils/formatters'
 
@@ -37,15 +37,3 @@ export const getSetupModalCronData = (body: SlackViewAction): z.infer<typeof Bas
     message: get(values, [BlockIds.setupModal.message, ActionIds.setupModal.message, 'value'])!,
   }
 }
-
-export const generateErrorMessage = <T>(errors: typeToFlattenedError<T>) =>
-  reduce(
-    errors.fieldErrors,
-    (acc, error) => {
-      if (error) {
-        return [...acc, error.join('\n')]
-      }
-      return acc
-    },
-    [] as string[]
-  ).join('\n')

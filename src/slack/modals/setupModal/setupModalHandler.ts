@@ -17,7 +17,6 @@ export const setupModalFieldsListener = (slackAppInstance: App) => {
     BlockIds.setupModal.cronType,
     async ({ ack, body }) => {
       await ack()
-      console.log('body', body)
       if (!body?.view) {
         return
       }

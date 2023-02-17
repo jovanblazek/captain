@@ -1,13 +1,14 @@
 import { AllMiddlewareArgs, App, SlackViewAction, SlackViewMiddlewareArgs } from '@slack/bolt'
 import Command from 'classes/Command'
+import ValidationError from 'classes/ValidationError'
 import { generateSetupModal } from 'slack/modals/setupModal'
-import { typeToFlattenedError } from 'zod'
 import { CronTypes } from 'constants/common'
 import { CommandNames } from 'constants/slack'
 import Log from 'utils/logger'
 import { sendMessage } from 'utils/messages'
 import { memberCronSetup } from './memberCron/memberCronSetup'
-import { generateErrorMessage, getSetupModalCronData } from './validation'
+import { textCronSetup } from './textCron/textCronSetup'
+import { getSetupModalCronData } from './validation'
 
 export const handleSetupModalSubmit = async (
   { ack, body }: SlackViewMiddlewareArgs<SlackViewAction> & AllMiddlewareArgs,
@@ -16,23 +17,27 @@ export const handleSetupModalSubmit = async (
   await ack()
   const { type, channelId, userId } = getSetupModalCronData(body)
 
-  let validationResult: typeToFlattenedError<unknown> | null = null
-  if (type === CronTypes.member) {
-    validationResult = await memberCronSetup(body, slackAppInstance)
-  } else if (type === CronTypes.text) {
-    // TODO
-    Log.debug('Running text cron setup')
-  }
-
-  if (validationResult && channelId && userId) {
-    await sendMessage(
-      {
-        channelId,
-        userId,
-        text: `⚠️ There was an error with your input:\n${generateErrorMessage(validationResult)}`,
-      },
-      slackAppInstance
-    )
+  try {
+    if (type === CronTypes.member) {
+      Log.debug('Running member cron setup')
+      await memberCronSetup(body, slackAppInstance)
+    } else if (type === CronTypes.text) {
+      Log.debug('Running text cron setup')
+      await textCronSetup(body)
+    }
+  } catch (error) {
+    if (channelId && userId) {
+      await sendMessage(
+        {
+          channelId,
+          userId,
+          text: error instanceof ValidationError ? error.message : 'Something went wrong',
+        },
+        slackAppInstance
+      )
+      return
+    }
+    Log.error(error)
   }
 }
 
@@ -46,7 +51,7 @@ export default new Command(
 
     await slackAppInstance.client.views.open({
       trigger_id: payload.trigger_id,
-      view: generateSetupModal({ channelId: payload.channel_id }),
+      view: generateSetupModal({ metadata: { channelId: payload.channel_id } }),
     })
   }
 )
