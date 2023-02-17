@@ -1,11 +1,28 @@
-import { ModalView } from '@slack/web-api'
+import { ModalView, PlainTextOption } from '@slack/web-api'
 import { CronType, CronTypes } from 'constants/common'
 import { ActionIds, BlockIds, ModalIds } from 'constants/slack'
 import { MemberCronBlocks, TextCronBlocks } from './blocks'
 
+const CronTypeOptions: PlainTextOption[] = [
+  {
+    text: {
+      type: 'plain_text',
+      text: 'Pick random members',
+    },
+    value: CronTypes.member,
+  },
+  {
+    text: {
+      type: 'plain_text',
+      text: 'Pick random text',
+    },
+    value: CronTypes.text,
+  },
+]
+
 export const generateSetupModal = ({
   metadata,
-  cronType,
+  cronType = CronTypes.member,
 }: {
   metadata: {
     channelId: string
@@ -22,69 +39,23 @@ export const generateSetupModal = ({
     text: 'Submit',
   },
   blocks: [
-    // TODO this doesn't work, need to figure out how to update modal if the block is type: 'input'
-    // {
-    //   type: 'input',
-    //   block_id: BlockIds.setupModal.cronType,
-    //   element: {
-    //     action_id: ActionIds.setupModal.cronType,
-    //     type: 'static_select',
-    //     placeholder: {
-    //       type: 'plain_text',
-    //       text: 'Select an item',
-    //     },
-    //     options: [
-    //       {
-    //         text: {
-    //           type: 'plain_text',
-    //           text: 'Pick random members',
-    //         },
-    //         value: CronTypes.member,
-    //       },
-    //       {
-    //         text: {
-    //           type: 'plain_text',
-    //           text: 'Pick random text',
-    //         },
-    //         value: CronTypes.text,
-    //       },
-    //     ],
-    //   },
-    //   label: {
-    //     type: 'plain_text',
-    //     text: 'Type',
-    //   },
-    // },
     {
-      type: 'section',
+      type: 'input',
       block_id: BlockIds.setupModal.cronType,
-      text: {
-        type: 'mrkdwn',
-        text: 'Type',
-      },
-      accessory: {
+      dispatch_action: true,
+      element: {
         action_id: ActionIds.setupModal.cronType,
         type: 'static_select',
         placeholder: {
           type: 'plain_text',
           text: 'Select an item',
         },
-        options: [
-          {
-            text: {
-              type: 'plain_text',
-              text: 'Pick random members',
-            },
-            value: CronTypes.member,
-          },
-          {
-            text: {
-              type: 'plain_text',
-              text: 'Pick random text',
-            },
-            value: CronTypes.text,
-          },
-        ],
+        initial_option: CronTypeOptions[0],
+        options: CronTypeOptions,
+      },
+      label: {
+        type: 'plain_text',
+        text: 'Type',
       },
     },
     {
